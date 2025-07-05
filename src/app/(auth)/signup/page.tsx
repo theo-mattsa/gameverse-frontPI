@@ -1,0 +1,62 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Swords } from "lucide-react";
+import Link from "next/link";
+
+export default function SignUpPage() {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen mx-auto gap-4 md:gap-8 w-full max-w-4xl px-4 md:px-8">
+      <div className="flex flex-col items-center gap-2">
+        <Swords className="w-12 h-12 md:w-16 md:h-16 transition-transform duration-1000 hover:rotate-360" />
+        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center">
+          Comece sua jornada agora!
+        </h1>
+        <p className="text-sm md:text-base text-center text-gray-600">
+          Entre com suas credenciais para acessar sua conta
+        </p>
+      </div>
+      <form className="w-full max-w-xs sm:max-w-sm md:max-w-md flex flex-col gap-2 space-y-3">
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="username">Username</Label>
+          <Input
+            className="h-10 md:h-11 text-sm md:text-base"
+            id="username"
+            type="text"
+            placeholder="Digite seu nome de usuário"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="email">Email</Label>
+          <Input
+            id="email"
+            type="email"
+            placeholder="Digite seu email"
+            className="h-10 md:h-11 text-sm md:text-base"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="password">Senha</Label>
+          <Input
+            id="password"
+            type="password"
+            placeholder="Digite sua senha"
+            className="h-10 md:h-11 text-sm md:text-base"
+          />
+        </div>
+        <Button
+          type="submit"
+          className="cursor-pointer h-10 md:h-11 text-sm md:text-base mt-4 md:mt-6"
+        >
+          Cadastrar
+        </Button>
+      </form>
+      <p className="text-sm md:text-base text-center">
+        Já tem uma conta?{" "}
+        <Link href="/login" className="font-bold hover:underline">
+          Faça login
+        </Link>
+      </p>
+    </div>
+  );
+}
