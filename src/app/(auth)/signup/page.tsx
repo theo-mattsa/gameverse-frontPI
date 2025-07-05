@@ -1,10 +1,38 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Swords } from "lucide-react";
+import { signUpSchema, SignUpSchema } from "@/lib/schemas/signup-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2, Swords } from "lucide-react";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
 
 export default function SignUpPage() {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<SignUpSchema>({
+    resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+    },
+  });
+
+  // TO-DO Check the username in real-time
+  const username = watch("username");
+
+  async function onSubmit(data: SignUpSchema) {
+    try {
+      // simulate an API call
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+    } catch (error) {}
+  }
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen mx-auto gap-4 md:gap-8 w-full max-w-4xl px-4 md:px-8">
       <div className="flex flex-col items-center gap-2">
@@ -16,39 +44,65 @@ export default function SignUpPage() {
           Entre com suas credenciais para acessar sua conta
         </p>
       </div>
-      <form className="w-full max-w-xs sm:max-w-sm md:max-w-md flex flex-col gap-2 space-y-3">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full max-w-xs sm:max-w-sm md:max-w-md flex flex-col gap-2 space-y-3"
+      >
         <div className="flex flex-col gap-1">
           <Label htmlFor="username">Username</Label>
           <Input
-            className="h-10 md:h-11 text-sm md:text-base"
+            className={`h-10 md:h-11 text-sm md:text-base ${
+              errors.username ? "border-red-500 focus:border-red-500" : ""
+            }`}
             id="username"
             type="text"
             placeholder="Digite seu nome de usuário"
+            {...register("username")}
           />
+          {errors.username && (
+            <span className="text-red-500 text-xs">
+              {errors.username.message}
+            </span>
+          )}
         </div>
         <div className="flex flex-col gap-1">
           <Label htmlFor="email">Email</Label>
           <Input
+            {...register("email")}
             id="email"
             type="email"
             placeholder="Digite seu email"
-            className="h-10 md:h-11 text-sm md:text-base"
+            className={`h-10 md:h-11 text-sm md:text-base ${
+              errors.email ? "border-red-500 focus:border-red-500" : ""
+            }`}
           />
+          {errors.email && (
+            <span className="text-red-500 text-xs">{errors.email.message}</span>
+          )}
         </div>
         <div className="flex flex-col gap-1">
           <Label htmlFor="password">Senha</Label>
           <Input
+            {...register("password")}
             id="password"
             type="password"
             placeholder="Digite sua senha"
-            className="h-10 md:h-11 text-sm md:text-base"
+            className={`h-10 md:h-11 text-sm md:text-base ${
+              errors.password ? "border-red-500 focus:border-red-500" : ""
+            }`}
           />
+          {errors.password && (
+            <span className="text-red-500 text-xs">
+              {errors.password.message}
+            </span>
+          )}
         </div>
         <Button
           type="submit"
+          disabled={isSubmitting}
           className="cursor-pointer h-10 md:h-11 text-sm md:text-base mt-4 md:mt-6"
         >
-          Cadastrar
+          {isSubmitting ? <Loader2 className="animate-spin" /> : "Cadastrar"}
         </Button>
       </form>
       <p className="text-sm md:text-base text-center">
