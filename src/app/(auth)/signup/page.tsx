@@ -2,13 +2,20 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useApi } from "@/hooks/use-api";
+import { authService } from "@/lib/api/auth";
 import { signUpSchema, SignUpSchema } from "@/lib/schemas/signup-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Swords } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function SignUpPage() {
+  const router = useRouter();
+  const signUpApi = useApi<void>();
+
   const {
     register,
     handleSubmit,
@@ -28,9 +35,13 @@ export default function SignUpPage() {
 
   async function onSubmit(data: SignUpSchema) {
     try {
-      // simulate an API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-    } catch (error) {}
+      const result = await signUpApi.execute(() => authService.signUp(data));
+      toast.success("Usuário cadastrado com sucesso!");
+      router.push("/");
+    } catch (error) {
+      console.error("Erro ao cadastrar:", error);
+      toast.error("Falha ao cadastrar usuário. Tente novamente.");
+    }
   }
 
   return (
