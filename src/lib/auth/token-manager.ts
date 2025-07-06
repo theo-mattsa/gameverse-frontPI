@@ -1,22 +1,24 @@
-const TOKEN_KEY = "gameverse_token";
+import Cookies from "js-cookie";
+import { AUTH_CONSTANTS } from "../constants/auth";
 
 export const tokenManager = {
   setToken(token: string) {
-    if (typeof window !== "undefined") {
-      localStorage.setItem(TOKEN_KEY, token);
-    }
+    Cookies.set(AUTH_CONSTANTS.TOKEN_KEY, token, {
+      expires: 7,
+      secure: true,
+      sameSite: "strict",
+      path: "/",
+    });
   },
+
   getToken(): string | null {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem(TOKEN_KEY);
-    }
-    return null;
+    return Cookies.get(AUTH_CONSTANTS.TOKEN_KEY) || null;
   },
+
   removeToken(): void {
-    if (typeof window !== "undefined") {
-      localStorage.removeItem(TOKEN_KEY);
-    }
+    Cookies.remove(AUTH_CONSTANTS.TOKEN_KEY, { path: "/" });
   },
+
   hasToken(): boolean {
     return !!this.getToken();
   },
