@@ -1,3 +1,4 @@
+"use client";
 import { handleApiError } from "@/lib/utils/api-error";
 import { useState } from "react";
 
