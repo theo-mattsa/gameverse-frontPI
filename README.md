@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GameVerse
 
-## Getting Started
+Este é um projeto criado com [Next.js](https://nextjs.org), utilizando o gerador oficial [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-First, run the development server:
+## Pré-requisitos
+
+Certifique-se de ter instalado:
+
+- [Node.js](https://nodejs.org/) (recomenda-se a versão LTS)
+- [pnpm](https://pnpm.io/)
+
+Para instalar o pnpm:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install -g pnpm
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Instalação
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Clone o repositório e acesse o diretório do projeto:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+git clone <URL-do-repositório>
+cd nome-do-projeto
+```
 
-## Learn More
+Instale as dependências com `pnpm`:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpm install
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Configuração do ambiente
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Crie um arquivo `.env.local` na raiz do projeto com o seguinte conteúdo:
 
-## Deploy on Vercel
+```env
+NEXT_PUBLIC_API_URL=localhost:8080
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+> ⚠️ Certifique-se de que sua API backend esteja rodando na porta 8080.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Executando o servidor de desenvolvimento
+
+Inicie o servidor com o comando:
+
+```bash
+pnpm dev
+```
+
+Abra o navegador em [http://localhost:3000](http://localhost:3000) para ver o projeto em execução.
+
+## Como gerar build de produção
+
+Para gerar o build otimizado do projeto, execute:
+
+```bash
+pnpm build
+```
+
+Esse comando irá:
+
+- Compilar os arquivos TypeScript/JavaScript
+- Otimizar as páginas e rotas do Next.js
+- Preparar tudo para deploy em produção
+
+### Como rodar a build localmente
+
+Após gerar o build, você pode rodar o projeto em modo produção com:
+
+```bash
+pnpm start
+```
+
+O servidor será iniciado em: http://localhost:3000
+
+> ⚠️ Certifique-se de que o arquivo `.env.local` está corretamente configurado antes de rodar o build.
