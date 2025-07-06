@@ -14,12 +14,10 @@ export interface ApiError {
   status: number;
 }
 
-export interface UserData {
-  user: {
-    id: string;
-    username: string;
-    email: string;
-    role: string;
-    foto: string | null;
-  };
+export interface User {
+  id: string;
+  username: string;
+  email: string;
+  role: string;
+  foto: string | null;
 }

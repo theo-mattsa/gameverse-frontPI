@@ -1,4 +1,4 @@
-import { SignUpRequest, SignInResponse, UserData } from "./types";
+import { SignUpRequest, SignInResponse, User } from "./types";
 import { api } from "./axios";
 export const authService = {
   async signUp(data: SignUpRequest): Promise<void> {
@@ -8,7 +8,7 @@ export const authService = {
     const res = await api.post("/login", { email, password });
     return res.data;
   },
-  async getUserData(): Promise<UserData> {
+  async getUserData(): Promise<User> {
     const res = await api.get("/me");
     return res.data;
   },

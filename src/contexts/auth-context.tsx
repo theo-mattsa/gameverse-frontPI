@@ -1,6 +1,6 @@
 "use client";
 import { authService } from "@/lib/api/auth";
-import { UserData } from "@/lib/api/types";
+import { User } from "@/lib/api/types";
 import { tokenManager } from "@/lib/auth/token-manager";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -10,7 +10,7 @@ interface AuthContextType {
   login: (token: string) => Promise<void>;
   logout: () => void;
   token: string | null;
-  user: UserData | null;
+  user: User | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -19,7 +19,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<UserData | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const checkToken = () => {

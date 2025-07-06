@@ -63,7 +63,7 @@ export default function Header() {
                   alt="User Avatar"
                 />
                 <AvatarFallback>
-                  {user?.user.username.slice(0, 2).toUpperCase()}
+                  {user?.username.slice(0, 2).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             </Button>
@@ -72,10 +72,10 @@ export default function Header() {
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium leading-none">
-                  {user?.user?.username || "Usuário"}
+                  {user?.username || "Usuário"}
                 </p>
                 <p className="text-xs leading-none text-muted-foreground">
-                  {user?.user?.email || "Email não disponível"}
+                  {user?.email || "Email não disponível"}
                 </p>
               </div>
             </DropdownMenuLabel>
