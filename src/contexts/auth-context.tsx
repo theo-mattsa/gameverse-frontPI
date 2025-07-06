@@ -1,13 +1,16 @@
 "use client";
+import { authService } from "@/lib/api/auth";
+import { UserData } from "@/lib/api/types";
 import { tokenManager } from "@/lib/auth/token-manager";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (token: string) => void;
+  login: (token: string) => Promise<void>;
   logout: () => void;
   token: string | null;
+  user: UserData | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -16,16 +19,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<UserData | null>(null);
 
   useEffect(() => {
     const checkToken = () => {
       const savedToken = tokenManager.getToken();
-      if (savedToken) {
+      const savedUser = tokenManager.getUserData();
+
+      if (savedToken && savedUser) {
         setToken(savedToken);
+        setUser(savedUser);
         setIsAuthenticated(true);
       } else {
         tokenManager.removeToken();
+        tokenManager.removeUserData();
         setToken(null);
+        setUser(null);
         setIsAuthenticated(false);
       }
       setIsLoading(false);
@@ -33,15 +42,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     checkToken();
   }, []);
 
-  function login(newToken: string) {
-    tokenManager.setToken(newToken);
-    setToken(newToken);
-    setIsAuthenticated(true);
+  async function login(newToken: string) {
+    try {
+      tokenManager.setToken(newToken);
+      setToken(newToken);
+      const userData = await authService.getUserData();
+      tokenManager.setUserData(userData);
+      setUser(userData);
+      setIsAuthenticated(true);
+    } catch (error) {
+      tokenManager.removeToken();
+      tokenManager.removeUserData();
+      setToken(null);
+      setUser(null);
+      setIsAuthenticated(false);
+      throw error;
+    }
   }
 
   function logout() {
     tokenManager.removeToken();
+    tokenManager.removeUserData();
     setToken(null);
+    setUser(null);
     setIsAuthenticated(false);
   }
 
@@ -53,6 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         logout,
         token,
+        user,
       }}
     >
       {children}

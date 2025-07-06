@@ -36,12 +36,12 @@ export default function LoginPage() {
       const result = await signUpApi.execute(() =>
         authService.signIn(data.email, data.password)
       );
-      login(result.token);
+      await login(result.token);
       toast.success("Login realizado com sucesso!");
       router.push("/feed");
     } catch (error) {
       console.error("Erro ao fazer login:", error);
-      toast.error("Falha ao fazer login. Verifique suas credenciais.");
+      toast.error(signUpApi.error);
     }
   }
   return (

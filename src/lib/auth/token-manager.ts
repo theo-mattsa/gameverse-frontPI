@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import { AUTH_CONSTANTS } from "../constants/auth";
+import { UserData } from "../api/types";
 
 export const tokenManager = {
   setToken(token: string) {
@@ -21,5 +22,20 @@ export const tokenManager = {
 
   hasToken(): boolean {
     return !!this.getToken();
+  },
+  setUserData(userData: UserData): void {
+    Cookies.set(AUTH_CONSTANTS.USER_KEY, JSON.stringify(userData), {
+      expires: 7,
+      secure: true,
+      sameSite: "strict",
+      path: "/",
+    });
+  },
+  getUserData(): UserData | null {
+    const data = Cookies.get(AUTH_CONSTANTS.USER_KEY);
+    return data ? JSON.parse(data) : null;
+  },
+  removeUserData(): void {
+    Cookies.remove(AUTH_CONSTANTS.USER_KEY, { path: "/" });
   },
 };

@@ -10,12 +10,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/contexts/auth-context";
-import { LogOut, Search, Swords, User } from "lucide-react";
+import { LogOut, Swords, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function Header() {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const router = useRouter();
 
   const handleLogout = () => {
@@ -58,17 +58,24 @@ export default function Header() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-8 w-8 rounded-full">
               <Avatar className="h-8 w-8">
-                <AvatarImage src="/placeholder-avatar.jpg" alt="User Avatar" />
-                <AvatarFallback>JD</AvatarFallback>
+                <AvatarImage
+                  src="https://placehold.co/100x100"
+                  alt="User Avatar"
+                />
+                <AvatarFallback>
+                  {user?.user.username.slice(0, 2).toUpperCase()}
+                </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end" forceMount>
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">João Silva</p>
+                <p className="text-sm font-medium leading-none">
+                  {user?.user?.username || "Usuário"}
+                </p>
                 <p className="text-xs leading-none text-muted-foreground">
-                  joao@gameverse.com
+                  {user?.user?.email || "Email não disponível"}
                 </p>
               </div>
             </DropdownMenuLabel>
