@@ -1,8 +1,8 @@
-import { AxiosError } from "axios";
+import { isAxiosError } from "axios";
 import { ApiError } from "../api/types";
 
 export function handleApiError(error: unknown): string {
-  if (error instanceof AxiosError) {
+  if (isAxiosError(error)) {
     const apiError = error.response?.data as ApiError;
     // Erro de validação com campos específicos
     if (apiError?.errors) {
