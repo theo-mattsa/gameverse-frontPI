@@ -1,0 +1,16 @@
+export const GENRES = [
+  "Ação",
+  "Aventura",
+  "RPG",
+  "Estratégia",
+  "Simulação",
+  "Esporte",
+  "Corrida",
+  "Tiro",
+  "Luta",
+  "Puzzle",
+  "Horror",
+  "Plataforma",
+  "Indie",
+  "Multiplayer",
+];
