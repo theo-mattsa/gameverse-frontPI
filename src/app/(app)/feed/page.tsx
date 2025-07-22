@@ -1,12 +1,21 @@
-"use client";
-import { useRouter } from "next/navigation";
+import { ActivityItem } from "@/components/feed/activity-item";
+import { placeholderActivities } from "@/lib/fake-data";
 
 export default function FeedPage() {
-  const router = useRouter();
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-4xl font-bold mb-4">Feed Page</h1>
-      <p className="text-lg">This is the feed page content.</p>
+    <div className="p-8 space-y-2 max-w-3xl mx-auto">
+      <h1 className="text-2xl font-bold">Feed</h1>
+      <p className="text-muted-foreground">
+        Atividades recentes dos usuários que você segue
+      </p>
+      <div className="space-y-4">
+        {placeholderActivities.length === 0 && (
+          <p className="text-muted-foreground">Nenhuma atividade recente.</p>
+        )}
+        {placeholderActivities.map((activity, index) => (
+          <ActivityItem key={index} activity={activity} />
+        ))}
+      </div>
     </div>
   );
 }
