@@ -1,8 +1,36 @@
 # GameVerse
 
-Este é um projeto criado com [Next.js](https://nextjs.org), utilizando o gerador oficial [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Pré-requisitos
+## Diagrama de classes do domínio do problema
+
+
+## Ferramentas escolhidas para o front-end
+
+- Versionamento de código: Git
+- Teste unitários e de integração: Jest
+- Issue tracking: Jira
+- CI/CD: Github Actions
+- Deploy: Vercel
+
+## Frameworks utilizados
+
+Este é um projeto criado com o framework [Next.js](https://nextjs.org), utilizando o gerador oficial
+
+## Como gerar a documentação do código
+- Ferramenta utlizada: TypeDoc
+
+Para gerar a documentação do projeto, execute o seguinte comando:
+
+```bash
+npx typedoc
+```
+
+Isso fará o TypeDoc ler o código Typescript do projeto, interpretar os comentários e os tipos do TS e gerar um arquivo (na pasta docs) contendo a documentação. 
+
+## Como executar o projeto
+
+
+### Pré-requisitos
 
 Certifique-se de ter instalado:
 
@@ -15,14 +43,7 @@ Para instalar o pnpm:
 npm install -g pnpm
 ```
 
-## Instalação
-
-Clone o repositório e acesse o diretório do projeto:
-
-```bash
-git clone <URL-do-repositório>
-cd nome-do-projeto
-```
+### Instalação
 
 Instale as dependências com `pnpm`:
 
@@ -30,7 +51,7 @@ Instale as dependências com `pnpm`:
 pnpm install
 ```
 
-## Configuração do ambiente
+### Configuração do ambiente
 
 Crie um arquivo `.env.local` na raiz do projeto com o seguinte conteúdo:
 
@@ -40,7 +61,7 @@ NEXT_PUBLIC_API_URL=localhost:8080
 
 > ⚠️ Certifique-se de que sua API backend esteja rodando na porta 8080.
 
-## Executando o servidor de desenvolvimento
+### Executando o servidor de desenvolvimento
 
 Inicie o servidor com o comando:
 
@@ -50,7 +71,7 @@ pnpm dev
 
 Abra o navegador em [http://localhost:3000](http://localhost:3000) para ver o projeto em execução.
 
-## Como gerar build de produção
+### Como gerar build de produção
 
 Para gerar o build otimizado do projeto, execute:
 
