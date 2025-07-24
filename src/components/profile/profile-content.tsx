@@ -1,6 +1,6 @@
 "use client";
-
 import { useState } from "react";
+import { CreateListModal } from "./create-list-modal";
 import { GameList, UserReview } from "@/lib/api/types";
 import {
   Select,
@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Card } from "../ui/card";
 import { useRouter } from "next/navigation";
+import { CreateListGameSchema } from "@/lib/schemas/create-listgame-schema";
 
 interface ProfileContentProps {
   lists: GameList[];
@@ -22,10 +23,15 @@ export function ProfileContent({ lists, reviews }: ProfileContentProps) {
   const [selectedView, setSelectedView] = useState<"lists" | "reviews">(
     "lists"
   );
+  const [openModal, setOpenModal] = useState(false);
+
+  function handleCreateList(data: CreateListGameSchema) {
+    // TO-DO
+  }
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-end">
+      <div className="flex justify-between items-center">
         <Select
           value={selectedView}
           onValueChange={(value) =>
@@ -40,23 +46,39 @@ export function ProfileContent({ lists, reviews }: ProfileContentProps) {
             <SelectItem value="reviews">Reviews criados</SelectItem>
           </SelectContent>
         </Select>
+        {selectedView === "lists" && (
+          <button
+            className="bg-primary text-primary-foreground px-4 py-2 rounded hover:bg-primary/90 transition-colors"
+            onClick={() => setOpenModal(true)}
+            type="button"
+          >
+            Criar Lista
+          </button>
+        )}
       </div>
 
       {selectedView === "lists" ? (
-        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {lists.map((list) => (
-            <Card
-              key={list.id}
-              className="p-4 cursor-pointer hover:bg-accent transition-colors"
-              onClick={() => router.push(`/lists/${list.id}`)}
-            >
-              <span className="font-semibold text-lg">{list.name}</span>
-              <p className="text-muted-foreground text-sm">
-                {list.games.length} jogos
-              </p>
-            </Card>
-          ))}
-        </ul>
+        <>
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {lists.map((list) => (
+              <Card
+                key={list.id}
+                className="p-4 cursor-pointer hover:bg-accent transition-colors"
+                onClick={() => router.push(`/lists/${list.id}`)}
+              >
+                <span className="font-semibold text-lg">{list.name}</span>
+                <p className="text-muted-foreground text-sm">
+                  {list.games.length} jogos
+                </p>
+              </Card>
+            ))}
+          </ul>
+          <CreateListModal
+            open={openModal}
+            onOpenChange={setOpenModal}
+            onCreate={handleCreateList}
+          />
+        </>
       ) : (
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {reviews.map((review) => (
