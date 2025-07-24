@@ -15,7 +15,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRef, useState } from "react";
 
 interface EditProfileModalProps {
-  currentBio?: string;
+  currentBio?: string | null;
   currentFoto?: string | null;
   username: string;
   onSave: (bio: string, foto: string | null) => void;
@@ -32,7 +32,7 @@ export function EditProfileModal({
   const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (file) {
       setFile(file);
@@ -42,17 +42,17 @@ export function EditProfileModal({
       };
       reader.readAsDataURL(file);
     }
-  };
+  }
 
-  const handleRemoveFoto = () => {
+  function handleRemoveFoto() {
     setFoto(null);
     setFile(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
-  };
+  }
 
-  const handleSave = () => {
-    onSave(bio, foto);
-  };
+  function handleSave() {
+    onSave(bio || "", foto);
+  }
 
   return (
     <Dialog>
@@ -102,7 +102,7 @@ export function EditProfileModal({
         <div className="mt-4">
           <label className="block text-sm font-medium mb-1">Biografia</label>
           <Textarea
-            value={bio}
+            value={bio || ""}
             onChange={(e) => setBio(e.target.value)}
             rows={4}
             placeholder="Fale um pouco sobre você..."

@@ -15,21 +15,21 @@ export const fakeUsers: User[] = [
     username: "GamerPro123",
     email: "gamerpro@example.com",
     foto: "#s",
-    role: "USER",
+    role: "CLIENT",
   },
   {
     id: "user2",
     username: "IndieExplorer",
     email: "indie@example.com",
     foto: "#",
-    role: "USER",
+    role: "CLIENT",
   },
   {
     id: "user3",
     username: "RetroQueen",
     email: "retro@example.com",
     foto: "#",
-    role: "USER",
+    role: "CLIENT",
   },
 ];
 

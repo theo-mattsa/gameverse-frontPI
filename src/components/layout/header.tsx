@@ -58,10 +58,7 @@ export default function Header() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-8 w-8 rounded-full">
               <Avatar className="h-8 w-8">
-                <AvatarImage
-                  src="https://placehold.co/100x100"
-                  alt="User Avatar"
-                />
+                <AvatarImage src={user?.foto || undefined} />
                 <AvatarFallback>
                   {user?.username.slice(0, 2).toUpperCase()}
                 </AvatarFallback>

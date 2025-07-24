@@ -1,0 +1,85 @@
+"use client";
+
+import { useState } from "react";
+import { GameList, UserReview } from "@/lib/api/types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Card } from "../ui/card";
+import { useRouter } from "next/navigation";
+
+interface ProfileContentProps {
+  lists: GameList[];
+  reviews: UserReview[];
+}
+
+export function ProfileContent({ lists, reviews }: ProfileContentProps) {
+  const router = useRouter();
+  const [selectedView, setSelectedView] = useState<"lists" | "reviews">(
+    "lists"
+  );
+
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-end">
+        <Select
+          value={selectedView}
+          onValueChange={(value) =>
+            setSelectedView(value as "lists" | "reviews")
+          }
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Selecionar visualização" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="lists">Listas criadas</SelectItem>
+            <SelectItem value="reviews">Reviews criados</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {selectedView === "lists" ? (
+        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {lists.map((list) => (
+            <Card
+              key={list.id}
+              className="p-4 cursor-pointer hover:bg-accent transition-colors"
+              onClick={() => router.push(`/lists/${list.id}`)}
+            >
+              <span className="font-semibold text-lg">{list.name}</span>
+              <p className="text-muted-foreground text-sm">
+                {list.games.length} jogos
+              </p>
+            </Card>
+          ))}
+        </ul>
+      ) : (
+        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {reviews.map((review) => (
+            <Card
+              key={review.id}
+              className="p-4 cursor-pointer hover:bg-accent transition-colors"
+              onClick={() => router.push(`/reviews/${review.id}`)}
+            >
+              <div className="flex justify-between items-start mb-2">
+                <span className="font-semibold text-lg">
+                  {review.game.title}
+                </span>
+                <span className="text-yellow-400 font-bold">
+                  {review.rating} ★
+                </span>
+              </div>
+              <p className="text-muted-foreground text-sm italic">
+                "{review.text}"
+              </p>
+            </Card>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}

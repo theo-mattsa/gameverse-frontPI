@@ -68,12 +68,12 @@ export function ActivityItem({ activity }: ActivityItemProps) {
       <div className="flex-1 min-w-0">
         <div className="flex items-start gap-2">
           <div className="flex-1">
-            <p className="text-sm leading-relaxed">
+            <div className="text-sm leading-relaxed">
               <span className="font-semibold text-foreground">
                 {activity.user.username}
               </span>{" "}
               {getActivityText(activity)}
-            </p>
+            </div>
             {activity.type === "new_review" && activity.contentSnippet && (
               <div className="mt-2 p-3 bg-muted/50 rounded-md border-l-2 border-blue-500">
                 <p className="text-sm text-muted-foreground italic">

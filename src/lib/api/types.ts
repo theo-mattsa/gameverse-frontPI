@@ -1,3 +1,13 @@
+export interface GetUserByUsernameRequest {
+  username: string;
+}
+
+export interface GetUserByUsernameResponse {
+  username: string;
+  foto: string | null;
+  bio?: string | null;
+}
+
 export interface SignUpRequest {
   username: string;
   email: string;
@@ -18,8 +28,9 @@ export interface User {
   id: string;
   username: string;
   email: string;
-  role: string;
+  role: "CLIENT" | "ADMIN";
   foto: string | null;
+  bio?: string | null;
 }
 
 export interface Game {

@@ -96,7 +96,7 @@ export default function LoginPage() {
           disabled={isSubmitting}
           className="cursor-pointer h-10 md:h-11 text-sm md:text-base mt-4 md:mt-6"
         >
-          {isSubmitting ? <Loader2 className="animate-spin" /> : "Cadastrar"}
+          {isSubmitting ? <Loader2 className="animate-spin" /> : "Login"}
         </Button>
       </form>
       <p className="text-sm md:text-base text-center">
