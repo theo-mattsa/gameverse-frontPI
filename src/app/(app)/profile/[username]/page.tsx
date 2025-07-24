@@ -2,12 +2,14 @@
 
 import { useAuth } from "@/contexts/auth-context";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useState } from "react";
 import { GameList, User } from "@/lib/api/types";
 import { useRouter, useParams } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/layout/skeleton";
+import { EditProfileModal } from "@/components/profile/edit-profile-modal";
+
 import {
   Select,
   SelectContent,
@@ -28,11 +30,13 @@ export default function ProfilePage() {
   const [selectedView, setSelectedView] = useState<"lists" | "reviews">(
     "lists"
   );
+  const [bio, setBio] = useState<string>("Minha biografia hehe");
+  const [foto, setFoto] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     // TODO: Buscar dados do usuário pelo username da rota (se nao for o proprio usuario)
-    if (user && user.username === username + "123") {
+    if (user && user.username === username) {
       setProfileUser(user);
     } else {
       setProfileUser({
@@ -55,6 +59,7 @@ export default function ProfilePage() {
     ]);
     setFavoriteGenre("Ação");
     setReviewsCount(5);
+    setFoto(null);
   }, [user, username]);
 
   if (isLoading)
@@ -91,7 +96,7 @@ export default function ProfilePage() {
       <div className="flex items-center gap-4 mb-6">
         <Avatar className="w-20 h-20 border">
           <AvatarImage
-            src={profileUser.foto || undefined}
+            src={foto || profileUser.foto || undefined}
             alt={profileUser.username}
           />
           <AvatarFallback className="bg-primary/10 text-primary font-medium text-3xl">
@@ -100,8 +105,21 @@ export default function ProfilePage() {
         </Avatar>
         <div className="flex-1">
           <h2 className="text-2xl font-bold">{profileUser.username}</h2>
+          <p className="text-muted-foreground text-sm mt-1 break-words max-w-xs">
+            {bio}
+          </p>
         </div>
-        {profileUser.id !== user.id && (
+        {profileUser.id === user.id ? (
+          <EditProfileModal
+            currentBio={bio}
+            currentFoto={foto || profileUser.foto}
+            username={profileUser.username}
+            onSave={(newBio, newFoto) => {
+              setBio(newBio);
+              setFoto(newFoto);
+            }}
+          />
+        ) : (
           <Button
             className="cursor-pointer"
             variant={isFollowing ? "secondary" : "default"}

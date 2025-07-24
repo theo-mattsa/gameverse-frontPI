@@ -72,9 +72,7 @@ export function ActivityItem({ activity }: ActivityItemProps) {
               <span className="font-semibold text-foreground">
                 {activity.user.username}
               </span>{" "}
-              <span className="text-muted-foreground">
-                {getActivityText(activity)}
-              </span>
+              {getActivityText(activity)}
             </p>
             {activity.type === "new_review" && activity.contentSnippet && (
               <div className="mt-2 p-3 bg-muted/50 rounded-md border-l-2 border-blue-500">
