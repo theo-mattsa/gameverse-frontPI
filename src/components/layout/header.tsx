@@ -82,16 +82,16 @@ export default function Header() {
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link
-                href="/profile"
-                className="w-full flex items-center gap-2 transition-colors duration-200 hover:bg-muted/50 rounded-sm px-2 py-1.5"
+                className="cursor-pointer"
+                href={`/profile/${user?.username}`}
               >
                 <User className="w-4 h-4" />
-                Ver Perfil
+                Ver meu perfil
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={handleLogout}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 cursor-pointer"
             >
               <LogOut className="w-4 h-4" />
               Logout
