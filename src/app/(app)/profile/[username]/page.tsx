@@ -9,6 +9,7 @@ import { ProfileHeader } from "@/components/profile/profile-header";
 import { ProfileStats } from "@/components/profile/profile-stats";
 import { ProfileContent } from "@/components/profile/profile-content";
 import { toast } from "sonner";
+import { userService } from "@/lib/api/user-service";
 
 export default function ProfilePage() {
   const params = useParams();
@@ -36,9 +37,10 @@ export default function ProfilePage() {
 
   async function handleSaveProfile(newBio: string, newFoto: string | null) {
     if (!user) return;
-
+    console.log(newFoto);
     try {
-      // await api.updateUserProfile({ userId: authUser.id, bio: newBio, foto: newFoto });
+      // Atualiza o perfil no backend
+      await userService.updateUserProfile(newBio, newFoto?.split(",")[1] || null);
 
       // Atualiza o estado global
       updateUser({ ...user, bio: newBio, foto: newFoto });

@@ -12,11 +12,7 @@ export const signUpSchema = z.object({
   email: z.string().email("Email inválido").min(1, "Email é obrigatório"),
   password: z
     .string()
-    .min(6, "Senha deve ter pelo menos 6 caracteres")
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-      "Senha deve conter pelo menos uma letra minúscula, maiúscula e um número"
-    ),
+    .min(3, "Senha deve ter pelo menos 3 caracteres")
 });
 
 export type SignUpSchema = z.infer<typeof signUpSchema>;

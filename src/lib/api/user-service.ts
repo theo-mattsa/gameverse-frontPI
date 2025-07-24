@@ -10,4 +10,10 @@ export const userService = {
     );
     return res.data;
   },
+  async updateUserProfile(
+    bio: string | null,
+    foto: string | null
+  ): Promise<void> {
+    await api.put(`/me`, { foto, bio });
+  },
 };

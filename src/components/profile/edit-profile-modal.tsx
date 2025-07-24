@@ -34,14 +34,15 @@ export function EditProfileModal({
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (file) {
-      setFile(file);
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        setFoto(ev.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const base64 = event.target?.result;
+      if (typeof base64 === "string") { 
+        setFoto(base64);
+      }
+    };
+    reader.readAsDataURL(file);
   }
 
   function handleRemoveFoto() {
