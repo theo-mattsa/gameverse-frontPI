@@ -1,7 +1,8 @@
-import { SignUpRequest, SignInResponse, User } from "./types";
+import { SignInResponse, User } from "./types";
 import { api } from "./axios";
+import { SignUpSchema } from "../schemas/signup-schema";
 export const authService = {
-  async signUp(data: SignUpRequest): Promise<void> {
+  async signUp(data: SignUpSchema): Promise<void> {
     await api.post("/user", data);
   },
   async signIn(email: string, password: string): Promise<SignInResponse> {

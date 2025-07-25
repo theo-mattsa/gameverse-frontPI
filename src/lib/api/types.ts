@@ -1,17 +1,13 @@
-export interface GetUserByUsernameRequest {
-  username: string;
-}
-
 export interface GetUserByUsernameResponse {
   username: string;
   foto: string | null;
   bio?: string | null;
 }
 
-export interface SignUpRequest {
-  username: string;
-  email: string;
-  password: string;
+export interface GetGameByUsernameResponse {
+  id: string;
+  name: string;
+  foto: string | null;
 }
 
 export interface SignInResponse {
@@ -23,7 +19,6 @@ export interface ApiError {
   errors?: Record<string, string[]>;
   status: number;
 }
-
 export interface User {
   id: string;
   username: string;
@@ -40,7 +35,7 @@ export interface Game {
   genres: string[];
   platforms: string[];
   releaseDate: string;
-  coverImageUrl?: string;
+  foto?: string;
   averageRating?: number; // 0-5
   developer?: string;
 }
@@ -50,7 +45,7 @@ export interface GameList {
   userId: string;
   name: string;
   description?: string;
-  games: Pick<Game, "id" | "title" | "coverImageUrl">[];
+  games: Pick<Game, "id" | "title" | "foto">[];
   createdAt: string;
   updatedAt?: string;
   isPublic: boolean;
@@ -59,7 +54,7 @@ export interface GameList {
 export interface UserReview {
   id: string;
   user: Pick<User, "id" | "username" | "foto">;
-  game: Pick<Game, "id" | "title" | "coverImageUrl">;
+  game: Pick<Game, "id" | "title" | "foto">;
   title: string;
   text: string;
   createdAt: string;
