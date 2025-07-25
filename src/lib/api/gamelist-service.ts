@@ -21,4 +21,8 @@ export const gameListService = {
     );
     return response.data;
   },
+  async getGameListById(id: string): Promise<GetGameListResponse | null> {
+    const res = await api.get<GetGameListResponse>(`/gamelists/${id}`);
+    return res.data;
+  },
 };

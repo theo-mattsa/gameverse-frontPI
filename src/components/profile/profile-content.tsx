@@ -78,7 +78,7 @@ export function ProfileContent({ lists, reviews }: ProfileContentProps) {
               <Card
                 key={list.id}
                 className="p-4 cursor-pointer hover:bg-accent transition-colors"
-                onClick={() => router.push(`/lists/${list.id}`)}
+                onClick={() => router.push(`/list/${list.id}`)}
               >
                 <span className="font-semibold text-lg">{list.title}</span>
                 <p className="text-muted-foreground text-sm">
