@@ -60,6 +60,16 @@ export function CreateListModal({
 
   const debouncedSearch = useDebounce(search, 500);
 
+  // Resetar campos ao fechar o modal
+  useEffect(() => {
+    if (!open) {
+      reset();
+      setSearch("");
+      setGames([]);
+      setSelectedGameObjects([]);
+    }
+  }, [open, reset]);
+
   useEffect(() => {
     if (debouncedSearch.trim().length === 0) return;
     async function fetchGames() {
