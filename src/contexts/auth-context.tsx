@@ -2,7 +2,7 @@
 import { authService } from "@/lib/api/auth";
 import { User } from "@/lib/api/types";
 import { tokenManager } from "@/lib/auth/token-manager";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -74,21 +74,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     tokenManager.setUserData(newUser);
   }
 
-  return (
-    <AuthContext.Provider
-      value={{
-        isAuthenticated,
-        isLoading,
-        login,
-        logout,
-        token,
-        user,
-        updateUser,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+  const values = useMemo(
+    () => ({
+      isAuthenticated,
+      isLoading,
+      login,
+      logout,
+      token,
+      user,
+      updateUser,
+    }),
+    [isAuthenticated, isLoading, token, user]
   );
+
+  return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
