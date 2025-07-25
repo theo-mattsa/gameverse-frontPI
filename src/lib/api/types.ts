@@ -4,10 +4,12 @@ export interface GetUserByUsernameResponse {
   bio?: string | null;
 }
 
-export interface GetGameByUsernameResponse {
+export interface GetGameBySubstringResponse {
   id: string;
   name: string;
-  foto: string | null;
+  releaseDate: string;
+  foto: string;
+  slug: string;
 }
 
 export interface SignInResponse {

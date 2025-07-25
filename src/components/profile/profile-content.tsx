@@ -25,9 +25,7 @@ export function ProfileContent({ lists, reviews }: ProfileContentProps) {
   );
   const [openModal, setOpenModal] = useState(false);
 
-  function handleCreateList(data: CreateListGameSchema) {
-    // TO-DO
-  }
+  function handleCreateList(data: CreateListGameSchema) {}
 
   return (
     <div className="space-y-4">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -19,13 +19,15 @@ import {
   CommandEmpty,
 } from "@/components/ui/command";
 import { useForm, Controller } from "react-hook-form";
-import { fakeGames } from "@/lib/fake-data";
-import { Game } from "@/lib/api/types";
+import { GetGameBySubstringResponse } from "@/lib/api/types";
 import {
   createListGameSchema,
   CreateListGameSchema,
 } from "@/lib/schemas/create-listgame-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useDebounce } from "@/hooks/use-debounce";
+import { gameService } from "@/lib/api/game-service";
+import { Skeleton } from "../ui/skeleton";
 
 interface CreateListModalProps {
   open: boolean;
@@ -47,14 +49,36 @@ export function CreateListModal({
         games: [],
       },
     });
+
   const [search, setSearch] = useState("");
-  const games: Pick<Game, "id" | "title">[] = fakeGames;
+  const [isLoading, setIsLoading] = useState(false);
+  const [games, setGames] = useState<GetGameBySubstringResponse[]>([]);
   const selectedGames = watch("games");
+
+  const debouncedSearch = useDebounce(search, 500);
+
+  useEffect(() => {
+    if (debouncedSearch.trim().length === 0) return;
+    async function fetchGames() {
+      setIsLoading(true);
+      try {
+        const data = await gameService.getGameBySubstring(debouncedSearch);
+        setGames(data);
+      } catch (error) {
+        console.error("Erro ao buscar jogos:", error);
+        setGames([]);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchGames();
+  }, [debouncedSearch]);
 
   function handleAddGame(gameId: string) {
     if (!selectedGames.includes(gameId)) {
       setValue("games", [...selectedGames, gameId]);
     }
+    setSearch("");
   }
 
   function handleRemoveGame(gameId: string) {
@@ -105,37 +129,51 @@ export function CreateListModal({
                 onValueChange={setSearch}
               />
               <CommandList>
-                {search ? (
-                  games
-                    .filter((g) =>
-                      g.title.toLowerCase().includes(search.toLowerCase())
-                    )
-                    .map((game) => (
+                {isLoading ? (
+                  <div className="p-2 space-y-2">
+                    <Skeleton className="h-4 w-3/4" />
+                    <Skeleton className="h-4 w-1/2" />
+                    <Skeleton className="h-4 w-full" />
+                  </div>
+                ) : debouncedSearch.length > 0 ? (
+                  games.length > 0 ? (
+                    games.map((game) => (
                       <CommandItem
                         key={game.id}
                         onSelect={() => handleAddGame(game.id)}
                       >
-                        {game.title}
+                        {game.name}
                       </CommandItem>
                     ))
+                  ) : (
+                    <CommandEmpty>Nenhum jogo encontrado.</CommandEmpty>
+                  )
                 ) : (
-                  <CommandEmpty>Nenhum jogo encontrado.</CommandEmpty>
+                  <CommandEmpty>Digite para buscar jogos.</CommandEmpty>
                 )}
               </CommandList>
             </Command>
             <div className="flex flex-wrap gap-2 mt-2">
-              {selectedGames.map((game) => (
-                <span className="bg-accent px-2 py-1 rounded flex items-center gap-1 text-sm">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleRemoveGame(game)}
+              {selectedGames.map((gameId) => {
+                const game = games.find((g) => g.id === gameId);
+                return (
+                  <span
+                    key={gameId}
+                    className="bg-accent px-2 py-1 rounded flex items-center gap-1 text-sm"
                   >
-                    <span className="sr-only">Remover jogo</span>
-                    &times;
-                  </Button>
-                </span>
-              ))}
+                    {game?.name}
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleRemoveGame(gameId)}
+                      type="button"
+                    >
+                      <span className="sr-only">Remover jogo</span>
+                      &times;
+                    </Button>
+                  </span>
+                );
+              })}
             </div>
           </div>
           <Button type="submit" className="w-full mt-2">

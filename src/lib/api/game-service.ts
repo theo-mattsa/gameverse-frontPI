@@ -1,11 +1,11 @@
 import { api } from "./axios";
-import { GetGameByUsernameResponse } from "./types";
+import { GetGameBySubstringResponse } from "./types";
 
 export const gameService = {
   async getGameBySubstring(
     substring: string
-  ): Promise<GetGameByUsernameResponse[]> {
-    const res = await api.get<GetGameByUsernameResponse[]>(
+  ): Promise<GetGameBySubstringResponse[]> {
+    const res = await api.get<GetGameBySubstringResponse[]>(
       `/games/${substring}`
     );
     return res.data;

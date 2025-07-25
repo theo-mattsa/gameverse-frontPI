@@ -37,10 +37,12 @@ export default function ProfilePage() {
 
   async function handleSaveProfile(newBio: string, newFoto: string | null) {
     if (!user) return;
-    console.log(newFoto);
     try {
       // Atualiza o perfil no backend
-      await userService.updateUserProfile(newBio, newFoto?.split(",")[1] || null);
+      await userService.updateUserProfile(
+        newBio,
+        newFoto?.split(",")[1] || null
+      );
 
       // Atualiza o estado global
       updateUser({ ...user, bio: newBio, foto: newFoto });
