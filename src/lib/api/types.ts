@@ -1,4 +1,5 @@
 export interface GetUserByUsernameResponse {
+  id: string;
   username: string;
   foto: string | null;
   bio?: string | null;

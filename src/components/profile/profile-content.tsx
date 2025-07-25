@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { CreateListModal } from "./create-list-modal";
-import { GameList, UserReview } from "@/lib/api/types";
+import { GetGameListResponse, UserReview } from "@/lib/api/types";
 import {
   Select,
   SelectContent,
@@ -16,7 +16,7 @@ import { gameListService } from "@/lib/api/gamelist-service";
 import { toast } from "sonner";
 
 interface ProfileContentProps {
-  lists: GameList[];
+  lists: GetGameListResponse[];
   reviews: UserReview[];
 }
 
@@ -80,7 +80,7 @@ export function ProfileContent({ lists, reviews }: ProfileContentProps) {
                 className="p-4 cursor-pointer hover:bg-accent transition-colors"
                 onClick={() => router.push(`/lists/${list.id}`)}
               >
-                <span className="font-semibold text-lg">{list.name}</span>
+                <span className="font-semibold text-lg">{list.title}</span>
                 <p className="text-muted-foreground text-sm">
                   {list.games.length} jogos
                 </p>

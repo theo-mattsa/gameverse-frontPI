@@ -1,21 +1,15 @@
 import { useState, useEffect } from "react";
-import { User, GameList, UserReview } from "@/lib/api/types";
-import { fakeGameLists, fakeReviews, fakeUsers } from "@/lib/fake-data";
+import { User, UserReview, GetGameListResponse } from "@/lib/api/types";
+import { fakeReviews } from "@/lib/fake-data";
 import { userService } from "@/lib/api/user-service";
-/* 
-import {
-  getUserByUsername,
-  getUserLists,
-  getUserReviews,
-} from "@/lib/api/client";
- */
+import { gameListService } from "@/lib/api/gamelist-service";
 
 export function useProfileData(username: string) {
   const [profileUser, setProfileUser] = useState<Pick<
     User,
     "bio" | "username" | "foto"
   > | null>(null);
-  const [lists, setLists] = useState<GameList[]>([]);
+  const [lists, setLists] = useState<GetGameListResponse[]>([]);
   const [reviews, setReviews] = useState<UserReview[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -27,19 +21,12 @@ export function useProfileData(username: string) {
       setIsLoading(true);
       setError(null);
       try {
-        /*
-        // Busca todos os dados em paralelo
-        const [userData, listsData, reviewsData] = await Promise.all([
-          // getUserByUsername(username),
-          // getUserLists(username),
-          // getUserReviews(username),
-        ]);
-         */
-        const [userData] = await Promise.all([
+        const [userData, listsData] = await Promise.all([
           userService.getUserByUsername(username),
+          gameListService.getGameListByUsername(username),
         ]);
         setProfileUser(userData);
-        setLists(fakeGameLists);
+        setLists(listsData);
         setReviews(fakeReviews);
       } catch (err) {
         setError(err as Error);

@@ -13,9 +13,11 @@ export const gameListService = {
       games,
     });
   },
-  async getGameListByUserId(userId: string): Promise<GetGameListResponse[]> {
+  async getGameListByUsername(
+    username: string
+  ): Promise<GetGameListResponse[]> {
     const response = await api.get<GetGameListResponse[]>(
-      `/gamelists/${userId}`
+      `/gamelists/username/${username}`
     );
     return response.data;
   },
