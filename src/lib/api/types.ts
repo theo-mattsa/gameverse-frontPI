@@ -12,6 +12,15 @@ export interface GetGameBySubstringResponse {
   slug: string;
 }
 
+export interface GetGameListResponse {
+  id: string;
+  title: string;
+  isPublic: boolean;
+  createdAt: string;
+  userId: string;
+  games: GetGameBySubstringResponse[];
+}
+
 export interface SignInResponse {
   token: string;
 }

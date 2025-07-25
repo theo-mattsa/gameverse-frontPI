@@ -12,6 +12,8 @@ import {
 import { Card } from "../ui/card";
 import { useRouter } from "next/navigation";
 import { CreateListGameSchema } from "@/lib/schemas/create-listgame-schema";
+import { gameListService } from "@/lib/api/gamelist-service";
+import { toast } from "sonner";
 
 interface ProfileContentProps {
   lists: GameList[];
@@ -25,7 +27,21 @@ export function ProfileContent({ lists, reviews }: ProfileContentProps) {
   );
   const [openModal, setOpenModal] = useState(false);
 
-  function handleCreateList(data: CreateListGameSchema) {}
+  async function handleCreateList(data: CreateListGameSchema) {
+    try {
+      await gameListService.createGameList(
+        data.name,
+        data.isPublic === 1,
+        data.games
+      );
+      setOpenModal(false);
+      toast.success("Lista criada com sucesso!");
+    } catch (error) {
+      console.error("Erro ao criar lista:", error);
+      toast.error("Erro ao criar lista. Tente novamente.");
+      setOpenModal(false);
+    }
+  }
 
   return (
     <div className="space-y-4">

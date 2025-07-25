@@ -53,6 +53,9 @@ export function CreateListModal({
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [games, setGames] = useState<GetGameBySubstringResponse[]>([]);
+  const [selectedGameObjects, setSelectedGameObjects] = useState<
+    GetGameBySubstringResponse[]
+  >([]);
   const selectedGames = watch("games");
 
   const debouncedSearch = useDebounce(search, 500);
@@ -78,6 +81,10 @@ export function CreateListModal({
     if (!selectedGames.includes(gameId)) {
       setValue("games", [...selectedGames, gameId]);
     }
+    const gameToAdd = games.find((g) => g.id === gameId);
+    if (gameToAdd && !selectedGameObjects.find((g) => g.id === gameId)) {
+      setSelectedGameObjects((old) => [...old, gameToAdd]);
+    }
     setSearch("");
   }
 
@@ -86,6 +93,7 @@ export function CreateListModal({
       "games",
       selectedGames.filter((id) => id !== gameId)
     );
+    setSelectedGameObjects((old) => old.filter((g) => g.id !== gameId));
   }
 
   function onSubmit(data: CreateListGameSchema) {
@@ -154,26 +162,25 @@ export function CreateListModal({
               </CommandList>
             </Command>
             <div className="flex flex-wrap gap-2 mt-2">
-              {selectedGames.map((gameId) => {
-                const game = games.find((g) => g.id === gameId);
-                return (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {selectedGameObjects.map((game) => (
                   <span
-                    key={gameId}
+                    key={game.id}
                     className="bg-accent px-2 py-1 rounded flex items-center gap-1 text-sm"
                   >
-                    {game?.name}
+                    {game.name}
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => handleRemoveGame(gameId)}
+                      onClick={() => handleRemoveGame(game.id)}
                       type="button"
                     >
                       <span className="sr-only">Remover jogo</span>
                       &times;
                     </Button>
                   </span>
-                );
-              })}
+                ))}
+              </div>
             </div>
           </div>
           <Button type="submit" className="w-full mt-2">
