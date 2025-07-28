@@ -1,36 +1,51 @@
 # GameVerse
 
-
 ## Diagrama de classes do domínio do problema
 
+![Diagrama de classes](imgs/image.png)
 
-## Ferramentas escolhidas para o front-end
+## Ferramentas escolhidas
 
 - Versionamento de código: Git
-- Teste unitários e de integração: Jest
+- Teste unitários e de integração: Vitest
 - Issue tracking: Jira
 - CI/CD: Github Actions
-- Deploy: Vercel
+- Deploy front-end: Vercel
+- Depoly back-end: Render
+- Containers: Docker
+- Armazenamento de arquivos: Cloudfare R2
 
 ## Frameworks utilizados
 
-Este é um projeto criado com o framework [Next.js](https://nextjs.org), utilizando o gerador oficial
+- O front-end é um projeto criado com o framework Next.JS
+- O back-end é um projeto criado com o framework Nest.JS
 
 ## Como gerar a documentação do código
-- Ferramenta utlizada: TypeDoc
 
-Para gerar a documentação do projeto, execute o seguinte comando:
+### Front-end
+
+- Ferramenta utlizada: TypeDoc
+  Para gerar a documentação do projeto, execute o seguinte comando:
 
 ```bash
 npx typedoc
 ```
 
-Isso fará o TypeDoc ler o código Typescript do projeto, interpretar os comentários e os tipos do TS e gerar um arquivo (na pasta docs) contendo a documentação. 
+Isso fará o TypeDoc ler o código Typescript do projeto, interpretar os comentários e os tipos do TS e gerar um arquivo (na pasta docs) contendo a documentação.
+
+### Back-end
+
+- Ferramenta utilizada: Swagger
+
+Com a API rodando em modo desenvolvimento, acesse no seu navegador:
+
+http://localhost:8080/swagger
+
+Assim, você poderá visualizar e testar os endpoints da API através da interface Swagger.
 
 ## Como executar o projeto
 
-
-### Pré-requisitos
+### Front-end
 
 Certifique-se de ter instalado:
 
@@ -43,15 +58,13 @@ Para instalar o pnpm:
 npm install -g pnpm
 ```
 
-### Instalação
-
 Instale as dependências com `pnpm`:
 
 ```bash
 pnpm install
 ```
 
-### Configuração do ambiente
+#### Configuração do ambiente
 
 Crie um arquivo `.env.local` na raiz do projeto com o seguinte conteúdo:
 
@@ -59,9 +72,9 @@ Crie um arquivo `.env.local` na raiz do projeto com o seguinte conteúdo:
 NEXT_PUBLIC_API_URL=localhost:8080
 ```
 
-> ⚠️ Certifique-se de que sua API backend esteja rodando na porta 8080.
+> Certifique-se de que sua API backend esteja rodando na porta 8080.
 
-### Executando o servidor de desenvolvimento
+#### Executando o servidor de desenvolvimento
 
 Inicie o servidor com o comando:
 
@@ -71,28 +84,77 @@ pnpm dev
 
 Abra o navegador em [http://localhost:3000](http://localhost:3000) para ver o projeto em execução.
 
-### Como gerar build de produção
+### Back-end
 
-Para gerar o build otimizado do projeto, execute:
+1. **Instale as dependências:**
+   ```
+   npm i
+   ```
+2. **Suba o container Docker (banco de dados):**
+   ```
+   docker-compose up -d
+   ```
+3. **Execute as migrations do Prisma (gera tipagens e estrutura do banco):**
+   ```
+   npx prisma migrate dev
+   ```
+4. **Inicie a API em modo desenvolvimento:**
+   ```
+   npm run start:dev
+   ```
 
-```bash
-pnpm build
+#### Testes End-to-End (E2E)
+
+- **Rodar os testes em modo watch:**
+
+  ```
+  npm run test:e2e:watch
+  ```
+
+  > Antes de rodar os testes e2e, é obrigatório ter instalado todas as dependências (`npm i`) e executado `npx prisma migrate dev`.
+
+- **Rodar os testes apenas uma vez:**
+  ```
+  npm run test:e2e
+  ```
+
+#### Parar a aplicação
+
+- **Parar o banco de dados Docker (sem excluir dados):**
+
+  ```
+  docker-compose stop
+  ```
+
+- **Deletar tudo, incluindo dados das tabelas:**
+  ```
+  docker-compose down -v
+  ```
+
+#### Visualização do banco de dados em tempo real
+
+Com a API rodando (`npm run start:dev`), abra um novo terminal no mesmo diretório e execute:
+
+```
+npx prisma studio
 ```
 
-Esse comando irá:
+Você poderá visualizar, editar, apagar e criar dados nas tabelas do banco através da interface web do Prisma Studio.
 
-- Compilar os arquivos TypeScript/JavaScript
-- Otimizar as páginas e rotas do Next.js
-- Preparar tudo para deploy em produção
+#### Observação importante
 
-### Como rodar a build localmente
-
-Após gerar o build, você pode rodar o projeto em modo produção com:
+- Crie um arquivo `.env` exatamente igual ao `.env.example` para que tudo funcione corretamente.
 
 ```bash
-pnpm start
+  DATABASE_URL=""
+  JWT_PRIVATE_KEY=""
+  JWT_PUBLIC_KEY=""
+
+  R2_ACCOUNT_ID=""
+  R2_BUCKET_NAME=""
+  R2_ACCESS_KEY_ID=""
+  R2_SECRET_ACCESS_KEY=""
+  R2_PUBLIC_URL=""
+
+  CLOUDFLARE_TOKEN=""
 ```
-
-O servidor será iniciado em: http://localhost:3000
-
-> ⚠️ Certifique-se de que o arquivo `.env.local` está corretamente configurado antes de rodar o build.
