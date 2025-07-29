@@ -11,7 +11,7 @@
 - Issue tracking: Jira
 - CI/CD: Github Actions
 - Deploy front-end: Vercel
-- Deploy back-end: Render
+- Deploy back-end: Railway
 - Containers: Docker
 - Armazenamento de arquivos: Cloudfare R2
 
