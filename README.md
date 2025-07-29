@@ -30,6 +30,12 @@
 npx typedoc
 ```
 
+ou
+
+```bash
+pnpm run type-docs
+```
+
 Isso fará o TypeDoc ler o código Typescript do projeto, interpretar os comentários e os tipos do TS e gerar um arquivo (na pasta docs) contendo a documentação.
 
 ## Como executar o projeto

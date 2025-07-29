@@ -10,6 +10,9 @@
 !.yarn/releases
 !.yarn/versions
 
+# Type docs folder
+docs/
+
 # testing
 /coverage
 

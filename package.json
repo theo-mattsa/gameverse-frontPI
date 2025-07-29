@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "type-docs": "npx typedoc"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
@@ -50,6 +51,7 @@
     "eslint-config-next": "15.3.5",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.5",
+    "typedoc": "^0.28.8",
     "typescript": "^5"
   }
 }
