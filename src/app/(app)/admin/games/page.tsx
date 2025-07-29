@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { gameService } from "@/lib/api/game-service";
 import { toast } from "sonner";
+import { fileToBase64 } from "@/utils";
 export default function AdminGamesPage() {
   const [fotoPreview, setFotoPreview] = useState<string>("");
   const {
@@ -23,18 +24,14 @@ export default function AdminGamesPage() {
     resolver: zodResolver(createGameSchema),
   });
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const base64 = event.target?.result;
-      if (typeof base64 === "string") {
-        setValue("foto", base64);
-        setFotoPreview(base64);
-      }
-    };
-    reader.readAsDataURL(file);
+    const base64 = await fileToBase64(file);
+    if (base64) {
+      setValue("foto", base64);
+      setFotoPreview(base64);
+    }
   }
 
   async function onSubmit(data: CreateGameSchema) {
