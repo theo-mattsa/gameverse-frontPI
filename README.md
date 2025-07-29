@@ -2,7 +2,7 @@
 
 ## Diagrama de classes do domínio do problema
 
-![Diagrama de classes](imgs/image.png)
+![Diagrama de classes](readme-imgs/image.png)
 
 ## Ferramentas escolhidas
 
