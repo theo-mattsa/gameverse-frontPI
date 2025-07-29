@@ -1,6 +1,6 @@
 # GameVerse
 
-- Obs: A documentação do back-end se encontra nesse repositório [https://github.com/PedroSodreUFES/backend-pi]
+- Obs: A documentação do back-end se encontra nesse repositório [https://github.com/PedroSodreUFES/gameverse-backend-pi]
 
 ## Diagrama de classes do domínio do problema
 
