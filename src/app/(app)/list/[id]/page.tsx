@@ -4,13 +4,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { GetGameListResponse } from "@/lib/api/types";
 import { gameListService } from "@/lib/api/gamelist-service";
 import { Skeleton } from "@/components/ui/skeleton";
+import { GameList } from "@/lib/api/types";
 
 export default function ProfilePage() {
   const { id } = useParams();
-  const [list, setList] = useState<GetGameListResponse | null>(null);
+  const [list, setList] = useState<GameList | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -56,8 +56,8 @@ export default function ProfilePage() {
                 >
                   <CardContent className="flex flex-col">
                     <Image
-                      src={game.foto}
-                      alt={`Imagem do jogo ${game.name}`}
+                      src={"/vercel.svg"}
+                      alt={game.name}
                       width={150}
                       height={150}
                       className="object-contain"

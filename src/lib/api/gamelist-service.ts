@@ -1,5 +1,5 @@
 import { api } from "./axios";
-import { GetGameListResponse } from "./types";
+import { GameList } from "./types";
 
 export const gameListService = {
   async createGameList(
@@ -13,16 +13,14 @@ export const gameListService = {
       games,
     });
   },
-  async getGameListByUsername(
-    username: string
-  ): Promise<GetGameListResponse[]> {
-    const response = await api.get<GetGameListResponse[]>(
+  async getGameListByUsername(username: string): Promise<GameList[]> {
+    const response = await api.get<GameList[]>(
       `/gamelists/username/${username}`
     );
     return response.data;
   },
-  async getGameListById(id: string): Promise<GetGameListResponse | null> {
-    const res = await api.get<GetGameListResponse>(`/gamelists/${id}`);
+  async getGameListById(id: string): Promise<GameList | null> {
+    const res = await api.get<GameList>(`/gamelists/${id}`);
     return res.data;
   },
 };

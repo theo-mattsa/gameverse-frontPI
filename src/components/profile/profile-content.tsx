@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { CreateListModal } from "./create-list-modal";
-import { GetGameListResponse, UserReview } from "@/lib/api/types";
 import {
   Select,
   SelectContent,
@@ -14,10 +13,11 @@ import { useRouter } from "next/navigation";
 import { CreateListGameSchema } from "@/lib/schemas/create-listgame-schema";
 import { gameListService } from "@/lib/api/gamelist-service";
 import { toast } from "sonner";
+import { GameList, Rating, RatingByUserId } from "@/lib/api/types";
 
 interface ProfileContentProps {
-  lists: GetGameListResponse[];
-  reviews: UserReview[];
+  lists: GameList[];
+  reviews: RatingByUserId[];
 }
 
 export function ProfileContent({ lists, reviews }: ProfileContentProps) {
@@ -103,14 +103,19 @@ export function ProfileContent({ lists, reviews }: ProfileContentProps) {
             >
               <div className="flex justify-between items-start mb-2">
                 <span className="font-semibold text-lg">
-                  {review.game.title}
+                  {review.game.name}
                 </span>
                 <span className="text-yellow-400 font-bold">
-                  {review.rating} ★
+                  {review.rate} ★
                 </span>
               </div>
+
+              <p className="text-sm font-medium text-muted-foreground mb-1">
+                {review.title}
+              </p>
+
               <p className="text-muted-foreground text-sm italic">
-                "{review.text}"
+                "{review.content}"
               </p>
             </Card>
           ))}
