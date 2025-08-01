@@ -12,7 +12,10 @@
 - Teste unitários e de integração: Vitest
 - Issue tracking: Jira
 - CI/CD: Github Actions
-- Deploy: Vercel
+- Deploy front-end: Vercel
+- Deploy back-end: Railway
+- Containers: Docker
+- Armazenamento de arquivos: Cloudfare R2
 
 ## Frameworks utilizados
 
