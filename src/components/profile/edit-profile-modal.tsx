@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRef, useState } from "react";
+import { fileToBase64 } from "@/utils";
 
 interface EditProfileModalProps {
   currentBio?: string | null;
@@ -32,17 +33,14 @@ export function EditProfileModal({
   const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const base64 = event.target?.result;
-      if (typeof base64 === "string") { 
-        setFoto(base64);
-      }
-    };
-    reader.readAsDataURL(file);
+    const base64 = await fileToBase64(file);
+    if (base64) {
+      setFoto(base64);
+      setFile(file);
+    }
   }
 
   function handleRemoveFoto() {

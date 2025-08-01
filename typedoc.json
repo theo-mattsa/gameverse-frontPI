@@ -1,0 +1,6 @@
+{
+  "entryPoints": ["src"],
+  "out": "docs/typedoc",
+  "exclude": ["**/*.test.ts", "**/tests/**"],
+  "entryPointStrategy": "expand"
+}

@@ -11,6 +11,9 @@
 !.yarn/versions
 package-lock.json
 
+# Type docs folder
+docs/
+
 # testing
 /coverage
 
