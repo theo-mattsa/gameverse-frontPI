@@ -1,3 +1,5 @@
+'use client';
+
 import { ActivityItem } from "@/components/feed/activity-item";
 import { placeholderActivities } from "@/lib/fake-data";
 

@@ -28,9 +28,9 @@ export default function Header() {
       <div className="container mx-auto flex h-16 items-center justify-around">
         <Link
           href="/feed"
-          className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+          className="group flex items-center gap-2 hover:opacity-80 transition-opacity"
         >
-          <Swords className="w-8 h-8 text-primary transition-transform duration-1000 hover:rotate-360" />
+          <Swords className="w-8 h-8 text-primary transition-transform duration-1000 group-hover:rotate-360" />
           <span className="text-xl font-bold">GameVerse</span>
         </Link>
         <nav className="hidden md:flex items-center gap-2">
@@ -60,7 +60,7 @@ export default function Header() {
               <Avatar className="h-8 w-8">
                 <AvatarImage src={user?.foto || undefined} />
                 <AvatarFallback>
-                  {user?.username.slice(0, 2).toUpperCase()}
+                  {user?.username?.slice(0, 2).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             </Button>

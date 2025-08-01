@@ -37,6 +37,7 @@ export const fakeGames: Game[] = [
   {
     id: "game1",
     title: "Odisseia Cibernética",
+    foto: "https://placehold.co/300x400.png?text=Forest+Guardian",
     description:
       "Embarque em uma jornada emocionante por um futuro distópico. Explore vastas cidades, melhore suas habilidades e descubra segredos sombrios.",
     genres: [GENRES[1], GENRES[0]], // RPG, Ação
@@ -48,6 +49,7 @@ export const fakeGames: Game[] = [
   {
     id: "game2",
     title: "Guardião da Floresta",
+    foto: "https://placehold.co/300x400.png?text=Forest+Guardian",
     description:
       "Proteja a floresta antiga de uma corrupção crescente. Domine a magia elemental e faça amizade com criaturas da floresta nesta aventura encantadora.",
     genres: [GENRES[3], GENRES[7]], // Aventura, Indie
@@ -58,6 +60,7 @@ export const fakeGames: Game[] = [
   {
     id: "game3",
     title: "Comandante Estelar",
+    foto: "https://placehold.co/300x400.png?text=Starship+Cmd",
     description:
       "Lidere sua frota à vitória em batalhas espaciais épicas. Gerencie recursos, pesquise novas tecnologias e supere seus inimigos neste grande jogo de estratégia.",
     genres: [GENRES[2], GENRES[4]], // Estratégia, Simulação
@@ -68,6 +71,7 @@ export const fakeGames: Game[] = [
   {
     id: "game4",
     title: "Pixel Puzzler Pro",
+    foto: "https://placehold.co/300x400.png?text=Pixel+Puzzler",
     description:
       "Desafie sua mente com centenas de quebra-cabeças de pixel art intricados. Uma experiência relaxante e ao mesmo tempo estimulante para os amantes de puzzles.",
     genres: [GENRES[6], GENRES[7]],
