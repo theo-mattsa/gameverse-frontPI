@@ -1,7 +1,4 @@
-'use client';
 
-import { ActivityItem } from "@/components/feed/activity-item";
-import { placeholderActivities } from "@/lib/fake-data";
 
 export default function FeedPage() {
   return (
@@ -10,7 +7,9 @@ export default function FeedPage() {
       <p className="text-muted-foreground">
         Atividades recentes dos usuários que você segue
       </p>
-      <div className="space-y-4">
+      {
+        /* 
+          <div className="space-y-4">
         {placeholderActivities.length === 0 && (
           <p className="text-muted-foreground">Nenhuma atividade recente.</p>
         )}
@@ -18,6 +17,9 @@ export default function FeedPage() {
           <ActivityItem key={index} activity={activity} />
         ))}
       </div>
+        */
+      }
+      
     </div>
   );
 }

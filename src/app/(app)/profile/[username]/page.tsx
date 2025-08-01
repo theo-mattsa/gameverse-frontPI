@@ -70,7 +70,7 @@ export default function ProfilePage() {
       <ProfileStats
         listsCount={lists.length}
         reviewsCount={reviews.length}
-        favoriteGenre={"Ação"}
+        favoriteGenre={"UNDEFINED"}
       />
 
       <ProfileContent lists={lists} reviews={reviews} />
