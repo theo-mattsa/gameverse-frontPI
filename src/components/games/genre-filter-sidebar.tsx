@@ -53,7 +53,7 @@ export function GenreFilterSidebar({
           </div>
         ))}
       </div>
-      <Button onClick={() => onApply(pendingGenres)} className="mt-4 w-full">
+      <Button onClick={() => onApply(pendingGenres)} className="cursor-pointer mt-4 w-full">
         Aplicar Filtros
       </Button>
     </aside>
