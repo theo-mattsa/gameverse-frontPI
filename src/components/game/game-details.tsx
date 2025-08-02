@@ -45,7 +45,7 @@ export function GameDetails({ game, reviews }: GameDetails) {
       <div className="flex flex-col md:flex-row gap-6 mb-8">
         <div className="w-48 h-64 rounded-lg overflow-hidden shadow-lg flex-shrink-0">
           <Image
-            src={"https://placehold.co/600x400"}
+            src={game.foto}
             alt={game.name}
             width={192}
             height={256}
@@ -72,7 +72,6 @@ export function GameDetails({ game, reviews }: GameDetails) {
               <span>{new Date(game.releaseDate).toLocaleDateString()}</span>
             </div>
           </div>
-
           <div className="mt-4 space-y-2">
             <div>
               <span className="text-sm font-medium">Gêneros:</span>

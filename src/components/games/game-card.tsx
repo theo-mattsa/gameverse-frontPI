@@ -20,7 +20,7 @@ export function GameCard({ game }: GameCardProps) {
       <CardContent className="p-0">
         <div className="relative aspect-[3/4] bg-muted overflow-hidden">
           <Image
-            src={"https://placehold.co/600x400"}
+            src={game.foto}
             alt={`${game.name}`}
             fill
           />

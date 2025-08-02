@@ -7,7 +7,7 @@ import { ratingService } from "@/lib/api/rating-service";
 export function useProfileData(username: string) {
   const [profileUser, setProfileUser] = useState<Pick<
     User,
-    "bio" | "username" | "foto"
+    "bio" | "username" | "foto" | "id"
   > | null>(null);
   const [lists, setLists] = useState<GameList[]>([]);
   const [reviews, setReviews] = useState<RatingByUserId[]>([]);
