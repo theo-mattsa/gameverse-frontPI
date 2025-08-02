@@ -2,6 +2,7 @@ export interface SignInResponse {
   token: string;
 }
 
+
 export interface Game {
   id: string;
   name: string;
@@ -19,6 +20,13 @@ export interface User {
   username: string;
   foto: string | null;
   bio?: string | null;
+}
+
+
+export interface Follower {
+  id: string;
+  username: string;
+  foto: string | null;
 }
 
 export interface GameList {

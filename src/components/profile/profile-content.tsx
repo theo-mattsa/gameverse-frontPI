@@ -99,7 +99,7 @@ export function ProfileContent({ lists, reviews }: ProfileContentProps) {
             <Card
               key={review.id}
               className="p-4 cursor-pointer hover:bg-accent transition-colors"
-              onClick={() => router.push(`/reviews/${review.id}`)}
+              onClick={() => router.push(`/game/${review.game.id}`)}
             >
               <div className="flex justify-between items-start mb-2">
                 <span className="font-semibold text-lg">

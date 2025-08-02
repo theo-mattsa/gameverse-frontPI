@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { User } from "@/lib/api/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { EditProfileModal } from "@/components/profile/edit-profile-modal";
+import { followService } from "@/lib/api/follow-service";
+import { Loader2 } from "lucide-react";
 
 interface ProfileHeaderProps {
-  profileUser: Pick<User, "bio" | "username" | "foto">;
+  profileUser: Pick<User, "bio" | "username" | "foto" | "id">;
   isCurrentUser: boolean;
   onSave: (newBio: string, newFoto: string | null) => void;
 }
@@ -18,6 +20,44 @@ export function ProfileHeader({
   onSave,
 }: ProfileHeaderProps) {
   const [isFollowing, setIsFollowing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!profileUser.id) return;
+    async function checkFollowingStatus() {
+      try {
+        const isFollowing = await followService.checkIfFollowing(profileUser.id);
+        setIsFollowing(isFollowing);
+      } catch (error) {
+        console.error("Erro ao verificar status de seguimento:", error);
+      }
+    }
+    checkFollowingStatus();
+  }, [profileUser.id]);
+
+  async function onFollowToggle() {
+    if (isCurrentUser || isLoading) return;
+    const previousState = isFollowing;
+
+    // Feedback imediato
+    setIsFollowing(!isFollowing);
+    setIsLoading(true);
+
+    try {
+      if (isFollowing) {
+        await followService.unfollowUser(profileUser.id);
+        setIsFollowing(false);
+      } else {
+        await followService.followUser(profileUser.id);
+        setIsFollowing(true);
+      }
+    } catch (err) {
+      console.error("Erro ao seguir/desseguir usuário:", err);
+      setIsFollowing(previousState);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -45,10 +85,17 @@ export function ProfileHeader({
         />
       ) : (
         <Button
+          onClick={onFollowToggle}
+          disabled={isLoading}
           variant={isFollowing ? "secondary" : "default"}
-          onClick={() => setIsFollowing((prev) => !prev)}
         >
-          {isFollowing ? "Seguindo" : "Seguir"}
+          {isLoading ? (
+            <Loader2 className="animate-spin w-4 h-4" />
+          ) : isFollowing ? (
+            "Seguindo"
+          ) : (
+            "Seguir"
+          )}
         </Button>
       )}
     </div>
