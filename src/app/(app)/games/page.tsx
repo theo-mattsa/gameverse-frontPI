@@ -6,6 +6,7 @@ import { GenreFilterSidebar } from "@/components/games/genre-filter-sidebar"
 import { GameSearchBar } from "@/components/games/game-search-bar"
 import { gameService } from "@/lib/api/game-service"
 import { Game } from "@/lib/api/types"
+import { GENRES } from "@/lib/constants/genres"
 
 export default function GamesPage() {
   const [appliedGenres, setAppliedGenres] = useState<string[]>([])
@@ -41,12 +42,21 @@ export default function GamesPage() {
     .filter((game) =>
       game.name.toLowerCase().includes(searchTerm.toLowerCase())
     )
-    .filter(
-      (game) =>
-        appliedGenres.length === 0 ||
-        (game.genres &&
-          game.genres.some((genreId) => appliedGenres.includes(genreId))) // Retorna true se algum dos gêneros do jogo estiver presente na lista de gêneros filtrados (appliedGenres)
-    )
+    .filter((game) => {
+      if (appliedGenres.length === 0) {
+        return true
+      }
+      if (!game.genres) { // Jogo sem gêneros
+        return false
+      }
+      // Traduz os IDs dos filtros para Nomes e verifica se há correspondência
+      const appliedGenreNames = appliedGenres.map(
+        (id) => GENRES.find((g) => g.id === id)?.name
+      )
+      return game.genres.some((gameGenre) =>
+        appliedGenreNames.includes(gameGenre)
+      )
+    })
 
   return (
     <div className="p-8 space-y-6 max-w-7xl mx-auto">
