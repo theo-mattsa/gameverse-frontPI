@@ -11,6 +11,7 @@ interface GenreFilterSidebarProps {
   onApply: (genres: string[]) => void
 }
 
+// Não realiza filtragem, mas armazena todos os filtros selecionados num array e, ao clicar em "Aplicar" manda esse array para a página
 export function GenreFilterSidebar({
   appliedGenres,
   onApply,

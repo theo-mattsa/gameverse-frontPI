@@ -31,6 +31,7 @@ export default function GamesPage() {
     setAppliedGenres(genres)
   }
 
+  // Após Sidebar aplicar os filtros, retorna o array de jogos que possuem aquele gênero
   const filteredGames = appliedGenres.length
     ? allGames.filter(
         (game) =>
