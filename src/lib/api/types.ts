@@ -1,6 +1,27 @@
 export interface SignInResponse {
   token: string;
 }
+export interface Activity {
+  id: string;
+  type: "new_review" | "new_list" | "game_status_update" | "new_rating";
+  createdAt: string;
+  user: {
+    id: string;
+    username: string;
+    foto: string | null;
+  };
+  targetGame?: {
+    id: string;
+    title: string;
+    slug: string;
+  };
+  targetList?: {
+    id: string;
+    name: string;
+  };
+  contentSnippet?: string; // Optional, used for new_rating and game_status_update
+}
+
 
 
 export interface Game {
