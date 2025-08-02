@@ -21,3 +21,18 @@ api.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
+
+// Interceptador para lidar com erros de autenticação (token expirado)
+api.interceptors.response.use(
+  (response) => response, // Simplesmente retorna a resposta se for bem-sucedida
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      tokenManager.removeToken();
+      // Evita o redirecionamento em loop se já estivermos na página de login
+      if (window.location.pathname !== "/login") {
+        window.location.href = "/login";
+      }
+    }
+    return Promise.reject(error);
+  }
+);
