@@ -1,28 +1,43 @@
-"use client";
+'use client'
 
-import { GamesGrid } from "@/components/games/games-grid";
-import { gameService } from "@/lib/api/game-service";
-import { Game } from "@/lib/api/types";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react"
+import { GamesGrid } from "@/components/games/games-grid"
+import { GenreFilterSidebar } from "@/components/games/genre-filter-sidebar"
+import { gameService } from "@/lib/api/game-service"
+import { Game } from "@/lib/api/types"
 
 export default function GamesPage() {
-  const [games, setGames] = useState<Game[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [appliedGenres, setAppliedGenres] = useState<string[]>([]) // Gêneros filtrados
+  const [allGames, setAllGames] = useState<Game[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const loadGames = async () => {
+    const fetchGames = async () => {
       try {
-        setIsLoading(true);
-        const games = await gameService.getAllGames();
-        setGames(games);
-      } catch (err) {
-        console.error("Failed to load games:", err);
+        setIsLoading(true)
+        const fetchedGames = await gameService.getAllGames()
+        setAllGames(fetchedGames)
+      } catch (error) {
+        console.error("Failed to fetch games:", error)
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
-    };
-    loadGames();
-  }, []);
+    }
+
+    fetchGames()
+  }, [])
+
+  const handleApplyFilters = (genres: string[]) => {
+    setAppliedGenres(genres)
+  }
+
+  const filteredGames = appliedGenres.length
+    ? allGames.filter(
+        (game) =>
+          game.genres &&
+          game.genres.some((genreId) => appliedGenres.includes(genreId)) // Retorna true se algum dos gêneros do jogo estiver presente na lista de gêneros filtrados (appliedGenres)
+      )
+    : allGames
 
   return (
     <div className="p-8 space-y-6 max-w-7xl mx-auto">
@@ -32,7 +47,17 @@ export default function GamesPage() {
           Descubra e explore nossa coleção de jogos
         </p>
       </div>
-      <GamesGrid games={games} isLoading={isLoading} />
+      
+      <div className="flex flex-col md:flex-row gap-8">
+          <GenreFilterSidebar
+            appliedGenres={appliedGenres}
+            onApply={handleApplyFilters}
+          />
+        <main className="flex-1">
+          <GamesGrid games={filteredGames} isLoading={isLoading} />
+        </main>
+      </div>
     </div>
-  );
+  )
 }
+
