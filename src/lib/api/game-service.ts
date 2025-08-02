@@ -26,8 +26,4 @@ export const gameService = {
       releaseDate,
     });
   },
-  async getAllGames(): Promise<Game[]> {
-    const res = await api.get<Game[]>("/games");
-    return res.data;
-  },
 };

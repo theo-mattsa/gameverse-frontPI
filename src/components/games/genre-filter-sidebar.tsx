@@ -31,7 +31,7 @@ export function GenreFilterSidebar({
   }
 
   return (
-    <aside className="w-full rounded-lg border p-4">
+    <aside className="w-full md:w-64 rounded-lg border p-4">
       <h3 className="text-lg font-semibold tracking-tight">Gêneros</h3>
       <div className="mt-4 space-y-2">
         {GENRES.map((genre) => (

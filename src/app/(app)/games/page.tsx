@@ -7,7 +7,7 @@ import { gameService } from "@/lib/api/game-service"
 import { Game } from "@/lib/api/types"
 
 export default function GamesPage() {
-  const [appliedGenres, setAppliedGenres] = useState<string[]>([])
+  const [appliedGenres, setAppliedGenres] = useState<string[]>([]) // Gêneros filtrados
   const [allGames, setAllGames] = useState<Game[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -32,8 +32,10 @@ export default function GamesPage() {
   }
 
   const filteredGames = appliedGenres.length
-    ? allGames.filter((game) =>
-        game.genres.some((genreId) => appliedGenres.includes(genreId))
+    ? allGames.filter(
+        (game) =>
+          game.genres &&
+          game.genres.some((genreId) => appliedGenres.includes(genreId)) // Retorna true se algum dos gêneros do jogo estiver presente na lista de gêneros filtrados (appliedGenres)
       )
     : allGames
 
@@ -45,18 +47,14 @@ export default function GamesPage() {
           Descubra e explore nossa coleção de jogos
         </p>
       </div>
-
-      console.log(allGames)
       
       <div className="flex flex-col md:flex-row gap-8">
-        <aside className="w-full md:w-64">
           <GenreFilterSidebar
             appliedGenres={appliedGenres}
             onApply={handleApplyFilters}
           />
-        </aside>
         <main className="flex-1">
-          <GamesGrid games={filteredGames} isLoading={isLoading} error={null} />
+          <GamesGrid games={filteredGames} isLoading={isLoading} />
         </main>
       </div>
     </div>
