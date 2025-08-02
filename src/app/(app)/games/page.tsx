@@ -1,57 +1,44 @@
-'use client';
+'use client'
 
-import { GamesGrid } from "@/components/games/games-grid";
-import { fakeGames } from "@/lib/fake-data";
-import { Game } from "@/lib/api/types";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react"
+import { GamesGrid } from "@/components/games/games-grid"
+import { GenreFilterSidebar } from "@/components/games/genre-filter-sidebar"
+import { gameService } from "@/lib/api/game-service"
+import { Game } from "@/lib/api/types"
 
 export default function GamesPage() {
-  const [games, setGames] = useState<Game[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [appliedGenres, setAppliedGenres] = useState<string[]>([])
+  const [allGames, setAllGames] = useState<Game[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const loadGames = async () => {
+    const fetchGames = async () => {
       try {
-        setIsLoading(true);
-        setError(null);
-        
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        setGames(fakeGames);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Erro ao carregar jogos');
+        setIsLoading(true)
+        const fetchedGames = await gameService.getAllGames()
+        setAllGames(fetchedGames)
+      } catch (error) {
+        console.error("Failed to fetch games:", error)
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
-    };
+    }
 
-    loadGames();
-  }, []);
+    fetchGames()
+  }, [])
 
-  const handleRetry = () => {
-    setError(null);
-    setGames([]);
-    setIsLoading(true);
-    
-    const loadGames = async () => {
-      try {
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        setGames(fakeGames);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Erro ao carregar jogos');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const handleApplyFilters = (genres: string[]) => {
+    setAppliedGenres(genres)
+  }
 
-    loadGames();
-  };
+  const filteredGames = appliedGenres.length
+    ? allGames.filter((game) =>
+        game.genres.some((genreId) => appliedGenres.includes(genreId))
+      )
+    : allGames
 
   return (
     <div className="p-8 space-y-6 max-w-7xl mx-auto">
-      {/* Page Header */}
       <div className="space-y-2">
         <h1 className="text-3xl font-bold">Jogos</h1>
         <p className="text-muted-foreground">
@@ -59,25 +46,19 @@ export default function GamesPage() {
         </p>
       </div>
 
-      {/* Games Grid */}
-      <GamesGrid 
-        games={games}
-        isLoading={isLoading}
-        error={error}
-        className="mt-6"
-      />
+      console.log(allGames)
       
-      {/* Error handling with retry */}
-      {error && !isLoading && (
-        <div className="text-center mt-4">
-          <button
-            onClick={handleRetry}
-            className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
-          >
-            Tentar novamente
-          </button>
-        </div>
-      )}
+      <div className="flex flex-col md:flex-row gap-8">
+        <aside className="w-full md:w-64">
+          <GenreFilterSidebar
+            appliedGenres={appliedGenres}
+            onApply={handleApplyFilters}
+          />
+        </aside>
+        <main className="flex-1">
+          <GamesGrid games={filteredGames} isLoading={isLoading} error={null} />
+        </main>
+      </div>
     </div>
-  );
+  )
 }
