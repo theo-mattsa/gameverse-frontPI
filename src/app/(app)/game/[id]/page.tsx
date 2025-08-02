@@ -3,7 +3,7 @@ import { GameDetails } from "@/components/game/game-details";
 import { gameService } from "@/lib/api/game-service";
 import { ratingService } from "@/lib/api/rating-service";
 import { Game, Rating } from "@/lib/api/types";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import LoadingGamePage from "@/components/game/loading-gamepage";
 
