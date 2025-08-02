@@ -1,3 +1,4 @@
+import { get } from "http";
 import { api } from "./axios";
 import { Game } from "./types";
 
@@ -8,6 +9,10 @@ export const gameService = {
   },
   async getGameById(id: string): Promise<Game> {
     const res = await api.get<Game>(`/game/${id}`);
+    return res.data;
+  },
+  async getAllGames(): Promise<Game[]> {
+    const res = await api.get<Game[]>("/games");
     return res.data;
   },
   async createGame(
