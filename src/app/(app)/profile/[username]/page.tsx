@@ -16,7 +16,7 @@ export default function ProfilePage() {
   const username = params?.username as string;
   const { user, updateUser } = useAuth();
 
-  const { profileUser, lists, reviews, isLoading, error, setProfileUser } =
+  const { profileUser, lists, reviews, isLoading, error, setProfileUser, favoriteGenre } =
     useProfileData(username);
 
   if (isLoading) {
@@ -70,7 +70,7 @@ export default function ProfilePage() {
       <ProfileStats
         listsCount={lists.length}
         reviewsCount={reviews.length}
-        favoriteGenre={"UNDEFINED"}
+        favoriteGenre={favoriteGenre}
       />
 
       <ProfileContent lists={lists} reviews={reviews} />
