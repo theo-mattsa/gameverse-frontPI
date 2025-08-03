@@ -6,8 +6,10 @@ import { userService } from "@/lib/api/user-service"
 import { User } from "@/lib/api/types"
 import { useApi } from "@/hooks/use-api"
 import { UserSearchBar } from "@/components/users/users-search-bar"
+import { useAuth } from "@/contexts/auth-context"
 
 export default function UsersPage() {
+  const { user } = useAuth()
   const [allUsers, setAllUsers] = useState<User[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const usersApi = useApi<User[]>()
@@ -28,9 +30,11 @@ export default function UsersPage() {
     setSearchTerm(term)
   }
 
-  const filteredUsers = allUsers.filter((user) =>
-    user.username.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  const filteredUsers = allUsers
+    .filter((u) => u.id !== user?.id)
+    .filter((u) =>
+      u.username.toLowerCase().includes(searchTerm.toLowerCase())
+    )
 
   return (
     <div className="p-8 space-y-6 max-w-7xl mx-auto">
