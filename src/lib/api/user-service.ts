@@ -12,4 +12,8 @@ export const userService = {
   ): Promise<void> {
     await api.put(`/me`, { foto, bio });
   },
+  async getAllUsers(): Promise<User[]> {
+    const res = await api.get<User[]>(`/users`);
+    return res.data;
+  },
 };
