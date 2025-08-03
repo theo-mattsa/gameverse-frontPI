@@ -41,7 +41,12 @@ export default function LoginPage() {
       router.push("/feed");
     } catch (error) {
       console.error("Erro ao fazer login:", error);
-      toast.error(signUpApi.error);
+      if (signUpApi.error) {
+        toast.error(signUpApi.error);
+      } else {
+        toast.error("Erro ao fazer login")
+      }
+
     }
   }
   return (
@@ -66,9 +71,8 @@ export default function LoginPage() {
             id="email"
             type="email"
             placeholder="Digite seu email"
-            className={`h-10 md:h-11 text-sm md:text-base ${
-              errors.email ? "border-red-500 focus:border-red-500" : ""
-            }`}
+            className={`h-10 md:h-11 text-sm md:text-base ${errors.email ? "border-red-500 focus:border-red-500" : ""
+              }`}
           />
           {errors.email && (
             <span className="text-red-500 text-xs">{errors.email.message}</span>
@@ -81,9 +85,8 @@ export default function LoginPage() {
             id="password"
             type="password"
             placeholder="Digite sua senha"
-            className={`h-10 md:h-11 text-sm md:text-base ${
-              errors.password ? "border-red-500 focus:border-red-500" : ""
-            }`}
+            className={`h-10 md:h-11 text-sm md:text-base ${errors.password ? "border-red-500 focus:border-red-500" : ""
+              }`}
           />
           {errors.password && (
             <span className="text-red-500 text-xs">

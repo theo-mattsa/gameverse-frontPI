@@ -1,0 +1,1 @@
+export const PLATFORMS = ["PC", "PlayStation 5", "Xbox Series X", "Nintendo Switch"] as const;

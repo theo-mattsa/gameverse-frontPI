@@ -19,7 +19,6 @@ import {
   CommandEmpty,
 } from "@/components/ui/command";
 import { useForm, Controller } from "react-hook-form";
-import { GetGameBySubstringResponse } from "@/lib/api/types";
 import {
   createListGameSchema,
   CreateListGameSchema,
@@ -28,6 +27,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useDebounce } from "@/hooks/use-debounce";
 import { gameService } from "@/lib/api/game-service";
 import { Skeleton } from "../ui/skeleton";
+import { Game } from "@/lib/api/types";
+import { useApi } from "@/hooks/use-api";
+import { toast } from "sonner";
+import { Label } from "../ui/label";
 
 interface CreateListModalProps {
   open: boolean;
@@ -51,16 +54,14 @@ export function CreateListModal({
     });
 
   const [search, setSearch] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [games, setGames] = useState<GetGameBySubstringResponse[]>([]);
-  const [selectedGameObjects, setSelectedGameObjects] = useState<
-    GetGameBySubstringResponse[]
-  >([]);
+  const [games, setGames] = useState<Game[]>([]);
+  const [selectedGameObjects, setSelectedGameObjects] = useState<Game[]>([]);
   const selectedGames = watch("games");
+  const gameApi = useApi<Game[]>();
 
   const debouncedSearch = useDebounce(search, 500);
 
-  // Resetar campos ao fechar o modal
+
   useEffect(() => {
     if (!open) {
       reset();
@@ -73,15 +74,15 @@ export function CreateListModal({
   useEffect(() => {
     if (debouncedSearch.trim().length === 0) return;
     async function fetchGames() {
-      setIsLoading(true);
       try {
-        const data = await gameService.getGameBySubstring(debouncedSearch);
+        const data = await gameApi.execute(() =>
+          gameService.getGameBySubstring(debouncedSearch)
+        );
         setGames(data);
       } catch (error) {
         console.error("Erro ao buscar jogos:", error);
+        toast.error(gameApi?.error || "Erro ao buscar jogos");
         setGames([]);
-      } finally {
-        setIsLoading(false);
       }
     }
     fetchGames();
@@ -139,21 +140,21 @@ export function CreateListModal({
             <span>Pública</span>
           </div>
           <div>
-            <label className="block mb-1 font-medium">Adicionar jogos</label>
+            <Label className="block mb-1 font-medium">Adicionar jogos</Label>
             <Command>
               <CommandInput
-                placeholder="Buscar jogo..."
+                placeholder="Digite para buscar jogos..."
                 value={search}
                 onValueChange={setSearch}
               />
               <CommandList>
-                {isLoading ? (
+                {gameApi.isLoading ? (
                   <div className="p-2 space-y-2">
                     <Skeleton className="h-4 w-3/4" />
                     <Skeleton className="h-4 w-1/2" />
                     <Skeleton className="h-4 w-full" />
                   </div>
-                ) : debouncedSearch.length > 0 ? (
+                ) : debouncedSearch.length > 0 && (
                   games.length > 0 ? (
                     games.map((game) => (
                       <CommandItem
@@ -166,8 +167,6 @@ export function CreateListModal({
                   ) : (
                     <CommandEmpty>Nenhum jogo encontrado.</CommandEmpty>
                   )
-                ) : (
-                  <CommandEmpty>Digite para buscar jogos.</CommandEmpty>
                 )}
               </CommandList>
             </Command>
