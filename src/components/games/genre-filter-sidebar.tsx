@@ -11,7 +11,6 @@ interface GenreFilterSidebarProps {
   onApply: (genres: string[]) => void
 }
 
-// Não realiza filtragem, mas armazena todos os filtros selecionados num array e, ao clicar em "Aplicar" manda esse array para a página
 export function GenreFilterSidebar({
   appliedGenres,
   onApply,
@@ -36,19 +35,19 @@ export function GenreFilterSidebar({
       <h3 className="text-lg font-semibold tracking-tight">Gêneros</h3>
       <div className="mt-4 space-y-2">
         {GENRES.map((genre) => (
-          <div key={genre.id} className="flex items-center space-x-2">
+          <div key={genre} className="flex items-center space-x-2">
             <Checkbox
-              id={genre.id}
-              checked={pendingGenres.includes(genre.id)}
+              id={genre}
+              checked={pendingGenres.includes(genre)}
               onCheckedChange={(checked) => {
-                handleGenreChange(genre.id, !!checked)
+                handleGenreChange(genre, !!checked)
               }}
             />
             <Label
-              htmlFor={genre.id}
+              htmlFor={genre}
               className="cursor-pointer text-sm font-medium leading-none"
             >
-              {genre.name}
+              {genre}
             </Label>
           </div>
         ))}

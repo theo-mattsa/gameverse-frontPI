@@ -13,7 +13,9 @@ import { useRouter } from "next/navigation";
 import { CreateListGameSchema } from "@/lib/schemas/create-listgame-schema";
 import { gameListService } from "@/lib/api/gamelist-service";
 import { toast } from "sonner";
-import { GameList, Rating, RatingByUserId } from "@/lib/api/types";
+import { GameList, RatingByUserId } from "@/lib/api/types";
+import { useApi } from "@/hooks/use-api";
+import { useProfileData } from "@/hooks/use-profile-data";
 
 interface ProfileContentProps {
   lists: GameList[];
@@ -26,16 +28,21 @@ export function ProfileContent({ lists, reviews }: ProfileContentProps) {
     "lists"
   );
   const [openModal, setOpenModal] = useState(false);
+  const listApi = useApi<void>();
 
   async function handleCreateList(data: CreateListGameSchema) {
     try {
-      await gameListService.createGameList(
-        data.name,
-        data.isPublic === 1,
-        data.games
+      await listApi.execute(() =>
+        gameListService.createGameList(
+          data.name,
+          data.isPublic === 1,
+          data.games
+        )
       );
       setOpenModal(false);
-      toast.success("Lista criada com sucesso!");
+      toast.success("Lista criada com sucesso! Recarregando...");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      window.location.reload();
     } catch (error) {
       console.error("Erro ao criar lista:", error);
       toast.error("Erro ao criar lista. Tente novamente.");

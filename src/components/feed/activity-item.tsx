@@ -5,12 +5,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { useRouter } from "next/navigation";
 
 interface ActivityItemProps {
   activity: Activity;
 }
 
 export function ActivityItem({ activity }: ActivityItemProps) {
+
+  const router = useRouter();
+
   const formatDate = (dateString: string) => {
     return formatDistanceToNow(new Date(dateString), {
       addSuffix: true,
@@ -88,7 +92,7 @@ export function ActivityItem({ activity }: ActivityItemProps) {
         <div className="flex items-start gap-2">
           <div className="flex-1">
             <div className="text-sm leading-relaxed">
-              <span className="font-semibold text-foreground">
+              <span className="font-semibold text-foreground hover:underline hover:cursor-pointer" onClick={() => router.push(`/profile/${activity.user.username}`)}>
                 {activity.user.username}
               </span>{" "}
               {getActivityText(activity)}

@@ -16,10 +16,10 @@ export default function GamePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const gameData = await gameService.getGameById(id as string);
-        const reviewsData = await ratingService.getRatingsByGameId(
-          id as string
-        );
+        const [gameData, reviewsData] = await Promise.all([
+          gameService.getGameById(id as string),
+          ratingService.getRatingsByGameId(id as string),
+        ]);
         setGame(gameData);
         setReviews(reviewsData);
       } catch (error) {

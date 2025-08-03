@@ -42,7 +42,6 @@ export function useProfileData(username: string) {
         setIsLoading(false);
       }
     };
-
     fetchData();
   }, [username]);
 
