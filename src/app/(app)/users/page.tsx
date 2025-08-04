@@ -1,26 +1,26 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { UsersGrid } from "@/components/users/users-grid"
-import { userService } from "@/lib/api/user-service"
 import { User } from "@/lib/api/types"
-import { useApi } from "@/hooks/use-api"
-import { UserSearchBar } from "@/components/users/users-search-bar"
-import { useAuth } from "@/contexts/auth-context"
+import { userService } from "@/lib/api/user-service"
+import { UserCard } from "@/components/users/user-card"
+import { UserSearchBar } from "@/components/users/user-search-bar"
 
 export default function UsersPage() {
-  const { user } = useAuth()
   const [allUsers, setAllUsers] = useState<User[]>([])
   const [searchTerm, setSearchTerm] = useState("")
-  const usersApi = useApi<User[]>()
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const result = await usersApi.execute(() => userService.getAllUsers())
-        setAllUsers(result)
+        setIsLoading(true)
+        const fetchedUsers = await userService.getAllUsers()
+        setAllUsers(fetchedUsers)
       } catch (error) {
         console.error("Failed to fetch users:", error)
+      } finally {
+        setIsLoading(false)
       }
     }
     fetchUsers()
@@ -30,20 +30,21 @@ export default function UsersPage() {
     setSearchTerm(term)
   }
 
-  const filteredUsers = allUsers
-    .filter((u) => u.id !== user?.id)
-    .filter((u) =>
-      u.username.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+  const filteredUsers = allUsers.filter((user) =>
+    user.username.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   return (
-    <div className="p-8 space-y-6 max-w-7xl mx-auto">
-      <div className="flex justify-center py-4 px">
+    <div className="container mx-auto p-4 md:p-8">
+      <h1 className="text-3xl font-bold mb-6 text-foreground">Usuários</h1>
+      <div className="flex mb-6">
         <UserSearchBar onSearchChange={handleSearchChange} />
       </div>
-      <main className="flex-1">
-        <UsersGrid users={filteredUsers} isLoading={usersApi.isLoading} />
-      </main>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+        {isLoading
+          ? Array.from({ length: 12 }).map((_, i) => <div key={i} className="w-full h-48 bg-card rounded-lg animate-pulse" />) // Placeholder Skeleton
+          : filteredUsers.map((user) => <UserCard key={user.id} user={user} />)}
+      </div>
     </div>
   )
 }
