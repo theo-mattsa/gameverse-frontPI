@@ -49,7 +49,7 @@ export default function Header() {
               key={item.href}
               href={item.href}
               className={cn(
-                "relative px-4 py-2 text-sm font-medium text-muted-foreground hover:text-primary",
+                "relative px-4 py-2 text-sm font-medium text-muted-foreground hover:text-primary focus:text-primary",
                 "after:block after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300",
                 "hover:after:w-full",
                 pathname === item.href && "after:w-full"
