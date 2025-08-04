@@ -3,7 +3,7 @@ import { GameDetails } from "@/components/game/game-details";
 import { gameService } from "@/lib/api/game-service";
 import { ratingService } from "@/lib/api/rating-service";
 import { Game, Rating } from "@/lib/api/types";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import LoadingGamePage from "@/components/game/loading-gamepage";
 
@@ -16,10 +16,10 @@ export default function GamePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const gameData = await gameService.getGameById(id as string);
-        const reviewsData = await ratingService.getRatingsByGameId(
-          id as string
-        );
+        const [gameData, reviewsData] = await Promise.all([
+          gameService.getGameById(id as string),
+          ratingService.getRatingsByGameId(id as string),
+        ]);
         setGame(gameData);
         setReviews(reviewsData);
       } catch (error) {

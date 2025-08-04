@@ -1,6 +1,15 @@
 export interface SignInResponse {
   token: string;
 }
+
+export enum GameStatus {
+  PLAYING = "PLAYING",
+  COMPLETED = "COMPLETED",
+  ON_HOLD = "ON_HOLD",
+  DROPPED = "DROPPED",
+  WISH_LIST = "WISH_LIST",
+}
+
 export interface Activity {
   id: string;
   type: "new_review" | "new_list" | "game_status_update" | "new_rating";
@@ -21,8 +30,6 @@ export interface Activity {
   };
   contentSnippet?: string; // Optional, used for new_rating and game_status_update
 }
-
-
 
 export interface Game {
   id: string;

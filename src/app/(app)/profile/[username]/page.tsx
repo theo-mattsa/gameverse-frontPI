@@ -16,7 +16,7 @@ export default function ProfilePage() {
   const username = params?.username as string;
   const { user, updateUser } = useAuth();
 
-  const { profileUser, lists, reviews, isLoading, error, setProfileUser } =
+  const { profileUser, lists, reviews, isLoading, error, setProfileUser, favoriteGenre } =
     useProfileData(username);
 
   if (isLoading) {
@@ -38,20 +38,14 @@ export default function ProfilePage() {
   async function handleSaveProfile(newBio: string, newFoto: string | null) {
     if (!user) return;
     try {
-      // Atualiza o perfil no backend
       await userService.updateUserProfile(
         newBio,
         newFoto?.split(",")[1] || null
       );
-
-      // Atualiza o estado global
       updateUser({ ...user, bio: newBio, foto: newFoto });
-
-      // Atualiza o estado local
       setProfileUser((prev) =>
         prev ? { ...prev, bio: newBio, foto: newFoto } : null
       );
-
       toast.success("Perfil atualizado com sucesso!");
     } catch (error) {
       console.error("Erro ao atualizar perfil:", error);
@@ -70,7 +64,7 @@ export default function ProfilePage() {
       <ProfileStats
         listsCount={lists.length}
         reviewsCount={reviews.length}
-        favoriteGenre={"UNDEFINED"}
+        favoriteGenre={favoriteGenre}
       />
 
       <ProfileContent lists={lists} reviews={reviews} />

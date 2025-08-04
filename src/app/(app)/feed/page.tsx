@@ -5,26 +5,27 @@ import { FeedService } from "@/lib/api/feed-service";
 import { Activity } from "@/lib/api/types";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useApi } from "@/hooks/use-api";
+import { toast } from "sonner";
 
 export default function FeedPage() {
-  const [activities, setActivities] = useState<Activity[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [activities, setActivities] = useState<Activity[] | null>([]);
+  const activitiesApi = useApi<Activity[]>();
 
   useEffect(() => {
-    const fetchActivities = async () => {
+    async function fetchActivities() {
       try {
-        const activities = await FeedService.getActivities();
-        setActivities(activities);
+        const result = await activitiesApi.execute(() => FeedService.getActivities())
+        setActivities(result);
       } catch (error) {
-        console.error("Error fetching activities:", error);
-      } finally {
-        setLoading(false);
+        console.error("Error fetching activities:", activitiesApi.error);
+        activitiesApi.error && toast.error(activitiesApi.error);
       }
-    };
+    }
     fetchActivities();
   }, []);
 
-  if (loading) {
+  if (activitiesApi.isLoading) {
     Array.from({ length: 3 }).map((_, idx) => (
       <div
         key={idx}
@@ -45,15 +46,14 @@ export default function FeedPage() {
           <p className="text-muted-foreground">
             Atividades recentes dos usuários que você segue
           </p>
-
-          {activities.length === 0 ? (
+          {activities?.length === 0 ? (
             <p className="text-muted-foreground">Nenhuma atividade recente.</p>
           ) : (
             <div className="space-y-4">
-              {activities.length === 0 && (
+              {activities?.length === 0 && (
                 <p className="text-muted-foreground">Nenhuma atividade recente.</p>
               )}
-              {activities.map((activity, index) => (
+              {activities?.map((activity, index) => (
                 <ActivityItem key={index} activity={activity} />
               ))}
             </div>

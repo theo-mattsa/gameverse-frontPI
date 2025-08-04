@@ -5,18 +5,39 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { useRouter } from "next/navigation";
 
 interface ActivityItemProps {
   activity: Activity;
 }
 
 export function ActivityItem({ activity }: ActivityItemProps) {
+
+  const router = useRouter();
+
   const formatDate = (dateString: string) => {
     return formatDistanceToNow(new Date(dateString), {
       addSuffix: true,
       locale: ptBR,
     });
   };
+
+  function getGameStatusBadge(status: string | undefined) {
+    switch (status) {
+      case "PLAYING":
+        return <Badge variant="secondary">Jogando</Badge>;
+      case "COMPLETED":
+        return <Badge variant="secondary">Finalizado</Badge>;
+      case "ON_HOLD":
+        return <Badge variant="secondary">Em pausa</Badge>;
+      case "DROPPED":
+        return <Badge variant="secondary">Abandonado</Badge>;
+      case "WISH_LIST":
+        return <Badge variant="secondary">Lista de desejos</Badge>;
+      default:
+        return <Badge variant="secondary">Desconhecido</Badge>;
+    }
+  }
 
   const getActivityText = (activity: Activity) => {
     switch (activity.type) {
@@ -39,7 +60,7 @@ export function ActivityItem({ activity }: ActivityItemProps) {
           <>
             atualizou o status de{" "}
             <span className="font-semibold">{activity.targetGame?.title}</span>{" "}
-            para <Badge variant="secondary">{activity.contentSnippet}</Badge>
+            para {getGameStatusBadge(activity.contentSnippet)}
           </>
         );
       case "new_rating":
@@ -71,7 +92,7 @@ export function ActivityItem({ activity }: ActivityItemProps) {
         <div className="flex items-start gap-2">
           <div className="flex-1">
             <div className="text-sm leading-relaxed">
-              <span className="font-semibold text-foreground">
+              <span className="font-semibold text-foreground hover:underline hover:cursor-pointer" onClick={() => router.push(`/profile/${activity.user.username}`)}>
                 {activity.user.username}
               </span>{" "}
               {getActivityText(activity)}
