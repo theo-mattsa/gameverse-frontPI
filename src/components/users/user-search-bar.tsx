@@ -24,7 +24,7 @@ export function UserSearchBar({ onSearchChange }: UserSearchBarProps) {
         placeholder="Buscar por nome de usuário..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="h-12 w-full rounded-full border-2 pl-12 pr-4 text-base focus:border-primary"
+        className="h-12 w-full rounded-xl border-2 pl-12 pr-4 text-base focus:border-primary"
       />
     </div>
   )

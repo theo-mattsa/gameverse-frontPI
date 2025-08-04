@@ -10,11 +10,19 @@ import {
 import { useAuth } from "@/contexts/auth-context";
 import { LogOut, Swords, User } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
+
+const navItems = [
+  { href: "/feed", label: "Feed" },
+  { href: "/games", label: "Jogos" },
+  { href: "/users", label: "Usuários" },
+];
 
 export default function Header() {
   const { user, logout } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleLogout = () => {
     logout();
@@ -32,24 +40,20 @@ export default function Header() {
           <span className="text-xl font-bold">GameVerse</span>
         </Link>
         <nav className="hidden md:flex items-center gap-2">
-          <Link
-            href="/feed"
-            className="relative px-4 py-2 text-sm font-medium text-muted-foreground hover:text-primary"
-          >
-            Feed
-          </Link>
-          <Link
-            href="/games"
-            className="relative px-4 py-2 text-sm font-medium text-muted-foreground hover:text-primary "
-          >
-            Jogos
-          </Link>
-          <Link
-            href="/users"
-            className="relative px-4 py-2 text-sm font-medium text-muted-foreground hover:text-primary "
-          >
-            Usuários
-          </Link>
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                "relative px-4 py-2 text-sm font-medium text-muted-foreground hover:text-primary",
+                "after:block after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300",
+                "hover:after:w-full",
+                pathname === item.href && "after:w-full"
+              )}
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
 
         <DropdownMenu>
@@ -85,24 +89,15 @@ export default function Header() {
       </div>
       <div className="md:hidden border-t px-4 py-3">
         <nav className="flex items-center justify-between">
-          <Link
-            href="/feed"
-            className="flex-1 text-center py-2 px-3 text-xs font-medium text-muted-foreground hover:text-primary"
-          >
-            Feed
-          </Link>
-          <Link
-            href="/users"
-            className="flex-1 text-center py-2 px-3 text-xs font-medium text-muted-foreground hover:text-primary"
-          >
-            Usuários
-          </Link>
-          <Link
-            href="/games"
-            className="flex-1 text-center py-2 px-3 text-xs font-medium text-muted-foreground hover:text-primary"
-          >
-            Jogos
-          </Link>
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="flex-1 text-center py-2 px-3 text-xs font-medium text-muted-foreground hover:text-primary"
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
       </div>
     </header>
