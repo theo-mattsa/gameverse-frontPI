@@ -5,8 +5,10 @@ import { User } from "@/lib/api/types"
 import { userService } from "@/lib/api/user-service"
 import { UserCard } from "@/components/users/user-card"
 import { UserSearchBar } from "@/components/users/user-search-bar"
+import { useAuth } from "@/contexts/auth-context"
 
 export default function UsersPage() {
+  const { user: currentUser } = useAuth()
   const [allUsers, setAllUsers] = useState<User[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [isLoading, setIsLoading] = useState(true)
@@ -31,7 +33,8 @@ export default function UsersPage() {
   }
 
   const filteredUsers = allUsers.filter((user) =>
-    user.username.toLowerCase().includes(searchTerm.toLowerCase())
+    user.username.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    user.username !== currentUser?.username
   )
 
   return (

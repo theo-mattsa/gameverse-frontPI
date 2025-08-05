@@ -1,15 +1,16 @@
 'use client'
 
-import * as React from "react"
+
 import { useTheme } from "next-themes"
 import { Sun, Moon } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useEffect, useState } from "react"
 
 export function ThemeToggle() {
   const { setTheme, theme } = useTheme()
-  const [mounted, setMounted] = React.useState(false)
+  const [mounted, setMounted] = useState(false)
 
-  React.useEffect(() => {
+  useEffect(() => {
     setMounted(true)
   }, [])
 
