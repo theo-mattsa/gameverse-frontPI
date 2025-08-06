@@ -1,5 +1,4 @@
 import { Star } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 interface GameRatingProps {
   avarageRating: number;
@@ -17,7 +16,7 @@ export function GameRating({ avarageRating }: GameRatingProps) {
 
   return (
     <div
-      className={cn("inline-flex items-center gap-1 text-xs [&>svg]:size-3")}
+      className="inline-flex items-center gap-1 text-xs [&>svg]:size-3"
       role="img"
     >
       <>
@@ -35,11 +34,11 @@ export function GameRating({ avarageRating }: GameRatingProps) {
               </>
             ) : (
               <Star
-                className={cn(
+                className={
                   star.filled
                     ? "text-yellow-400 fill-yellow-400"
                     : "text-muted-foreground/30"
-                )}
+                }
               />
             )}
           </div>

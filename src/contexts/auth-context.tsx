@@ -16,6 +16,10 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+/**
+ * Provider que realiza operações de autenticação e retorna dados do usuário para toda a aplicação
+ * @returns token, dados do usuário e estados de controle (isLoading e isAuthenticated)
+ */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);

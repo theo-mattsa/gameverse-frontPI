@@ -2,6 +2,10 @@
 import { handleApiError } from "@/lib/utils/api-error";
 import { useState } from "react";
 
+/**
+ * Hook personalizado para chamadas de API
+ * @returns retorna estados de controle (error e isLoading) e dados de retorno
+ */
 export function useApi<T = any>() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

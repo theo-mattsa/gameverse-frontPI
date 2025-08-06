@@ -2,6 +2,10 @@ import Cookies from "js-cookie";
 import { AUTH_CONSTANTS } from "../constants/auth";
 import { User } from "../api/types";
 
+/**
+ * Objeto de gerenciamento do token de autenticacao do usuário
+ * Obtem e seta token nos cookies da página
+ */
 export const tokenManager = {
   setToken(token: string) {
     Cookies.set(AUTH_CONSTANTS.TOKEN_KEY, token, {

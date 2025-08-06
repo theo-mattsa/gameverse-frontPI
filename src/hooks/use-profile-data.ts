@@ -5,6 +5,11 @@ import { GameList, RatingByUserId, User } from "@/lib/api/types";
 import { ratingService } from "@/lib/api/rating-service";
 import { userStatisticsService } from "@/lib/api/user-statistics-service";
 
+/**
+ * Hook que obtém todos os dados de perfil de um usuário
+ * @param username username do usuário cadastrado
+ * @returns Dados de perfil, listas de jogos criadas, reviews criados, gênero favoritos e estados de controle (error e loading)
+ */
 export function useProfileData(username: string) {
   const [profileUser, setProfileUser] = useState<Pick<
     User,
