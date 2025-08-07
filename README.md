@@ -12,8 +12,6 @@
 - Teste unitários e de integração: Jest
 - Issue tracking: Jira
 - CI/CD: Github Actions
-- Deploy front-end: Vercel
-- Deploy back-end: Railway
 - Containers: Docker
 - Armazenamento de arquivos: Cloudfare R2
 
