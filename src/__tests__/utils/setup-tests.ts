@@ -155,7 +155,8 @@ beforeAll(() => {
       typeof args[0] === 'string' &&
       (args[0].includes('Warning:') ||
         args[0].includes('The above error occurred') ||
-        args[0].includes('Consider adding an error boundary'))
+        args[0].includes('Consider adding an error boundary') ||
+        args[0].includes('An update to') && args[0].includes('was not wrapped in act'))
     ) {
       return
     }
