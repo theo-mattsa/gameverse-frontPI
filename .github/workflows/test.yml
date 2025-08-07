@@ -1,0 +1,43 @@
+# Nome do workflow que aparece no GitHub
+name: 🧪 Testes Automatizados
+
+# Quando executar os testes
+on:
+  push:                    # A cada push em qualquer branch
+    branches: [ main, dev ]
+  pull_request:           # A cada pull request
+    branches: [ main, dev ]
+
+# Jobs que serão executados
+jobs:
+  test:
+    name: Executar Testes
+    runs-on: ubuntu-latest  # Máquina virtual Ubuntu
+
+    steps:
+      # 1. Baixar o código do repositório
+      - name: 📥 Checkout do código
+        uses: actions/checkout@v4
+
+      # 2. Configurar Node.js
+      - name: ⚙️ Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      # 3. Instalar dependências
+      - name: 📦 Instalar dependências
+        run: npm ci
+
+      # 4. Executar os testes com cobertura
+      - name: 🧪 Executar testes
+        run: npm run test:ci
+
+      # 6. (Opcional) Upload do relatório de cobertura
+      - name: 📤 Upload cobertura para Codecov
+        uses: codecov/codecov-action@v3
+        if: success()
+        with:
+          file: ./coverage/lcov.info
+          fail_ci_if_error: false
