@@ -14,8 +14,6 @@ import { CreateListGameSchema } from "@/lib/schemas/create-listgame-schema";
 import { gameListService } from "@/lib/api/gamelist-service";
 import { toast } from "sonner";
 import { GameList, RatingByUserId } from "@/lib/api/types";
-import { useApi } from "@/hooks/use-api";
-import { useProfileData } from "@/hooks/use-profile-data";
 
 interface ProfileContentProps {
   lists: GameList[];
@@ -28,16 +26,13 @@ export function ProfileContent({ lists, reviews }: ProfileContentProps) {
     "lists"
   );
   const [openModal, setOpenModal] = useState(false);
-  const listApi = useApi<void>();
 
   async function handleCreateList(data: CreateListGameSchema) {
     try {
-      await listApi.execute(() =>
-        gameListService.createGameList(
-          data.name,
-          data.isPublic === 1,
-          data.games
-        )
+      await gameListService.createGameList(
+        data.name,
+        data.isPublic === 1,
+        data.games
       );
       setOpenModal(false);
       toast.success("Lista criada com sucesso! Recarregando...");
@@ -122,7 +117,7 @@ export function ProfileContent({ lists, reviews }: ProfileContentProps) {
               </p>
 
               <p className="text-muted-foreground text-sm italic">
-                "{review.content}"
+                &quot;{review.content}&quot;
               </p>
             </Card>
           ))}

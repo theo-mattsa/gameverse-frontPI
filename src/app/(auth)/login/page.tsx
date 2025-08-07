@@ -3,9 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/auth-context";
-import { useApi } from "@/hooks/use-api";
 import { authService } from "@/lib/api/auth";
-import { SignInResponse } from "@/lib/api/types";
 import { loginSchema, LoginSchema } from "@/lib/schemas/login-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Swords } from "lucide-react";
@@ -17,7 +15,6 @@ import Image from "next/image";
 
 export default function LoginPage() {
   const router = useRouter();
-  const signUpApi = useApi<SignInResponse>();
   const { login } = useAuth();
 
   const {
@@ -34,20 +31,13 @@ export default function LoginPage() {
 
   async function onSubmit(data: LoginSchema) {
     try {
-      const result = await signUpApi.execute(() =>
-        authService.signIn(data.email, data.password)
-      );
+      const result = await authService.signIn(data.email, data.password);
       await login(result.token);
       toast.success("Login realizado com sucesso!");
       router.push("/feed");
     } catch (error) {
       console.error("Erro ao fazer login:", error);
-      if (signUpApi.error) {
-        toast.error(signUpApi.error);
-      } else {
-        toast.error("Erro ao fazer login")
-      }
-
+      toast.error("Erro ao fazer login");
     }
   }
   return (
@@ -78,8 +68,9 @@ export default function LoginPage() {
             id="email"
             type="email"
             placeholder="Digite seu email"
-            className={`h-10 md:h-11 text-sm md:text-base ${errors.email ? "border-red-500 focus:border-red-500" : ""
-              }`}
+            className={`h-10 md:h-11 text-sm md:text-base ${
+              errors.email ? "border-red-500 focus:border-red-500" : ""
+            }`}
           />
           {errors.email && (
             <span className="text-red-500 text-xs">{errors.email.message}</span>
@@ -92,8 +83,9 @@ export default function LoginPage() {
             id="password"
             type="password"
             placeholder="Digite sua senha"
-            className={`h-10 md:h-11 text-sm md:text-base ${errors.password ? "border-red-500 focus:border-red-500" : ""
-              }`}
+            className={`h-10 md:h-11 text-sm md:text-base ${
+              errors.password ? "border-red-500 focus:border-red-500" : ""
+            }`}
           />
           {errors.password && (
             <span className="text-red-500 text-xs">

@@ -1,21 +1,21 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from "react"
-import { Search } from "lucide-react"
-import { useDebounce } from "@/hooks/use-debounce"
-import { Input } from "@/components/ui/input"
+import { useState, useEffect } from "react";
+import { Search } from "lucide-react";
+import { useDebounce } from "@/hooks/use-debounce";
+import { Input } from "@/components/ui/input";
 
 interface GameSearchBarProps {
   onSearchChange: (term: string) => void
 }
 
 export function GameSearchBar({ onSearchChange }: GameSearchBarProps) {
-  const [searchTerm, setSearchTerm] = useState("")
-  const debouncedSearchTerm = useDebounce(searchTerm, 300) // 300ms delay
+  const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebounce(searchTerm, 300); // 300ms delay
 
   useEffect(() => {
-    onSearchChange(debouncedSearchTerm)
-  }, [debouncedSearchTerm, onSearchChange])
+    onSearchChange(debouncedSearchTerm);
+  }, [debouncedSearchTerm, onSearchChange]);
 
   return (
     <div className="relative w-full max-w-md"> 
@@ -27,5 +27,5 @@ export function GameSearchBar({ onSearchChange }: GameSearchBarProps) {
         className="h-12 w-full rounded-xl border-2 pl-12 pr-4 text-base focus:border-primary"
       />
     </div>
-  )
+  );
 }

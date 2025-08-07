@@ -7,13 +7,12 @@ import { useEffect, useState } from "react";
 import { gameListService } from "@/lib/api/gamelist-service";
 import { Skeleton } from "@/components/ui/skeleton";
 import { GameList } from "@/lib/api/types";
-import { useApi } from "@/hooks/use-api";
 import { toast } from "sonner";
 
 export default function ProfilePage() {
   const { id } = useParams();
   const [list, setList] = useState<GameList | null>(null);
-  const listApi = useApi<GameList | null>();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!id) {
@@ -21,13 +20,13 @@ export default function ProfilePage() {
     }
     async function fetchGameList() {
       try {
-        const response = await listApi.execute(() =>
-          gameListService.getGameListById(id as string)
-        );
+        const response = await gameListService.getGameListById(id as string);
         setList(response);
       } catch (error) {
         console.error("Erro ao carregar lista de jogos:", error);
-        toast.error(listApi?.error || "Erro ao carregar lista de jogos");
+        toast.error("Erro ao carregar lista de jogos");
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchGameList();
@@ -35,7 +34,7 @@ export default function ProfilePage() {
 
   return (
     <div className="max-w-4xl mx-auto py-10 px-4">
-      {listApi.isLoading ? (
+      {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {Array.from({ length: 4 }, (_, i) => (
             <Skeleton key={i} className="h-64 w-full rounded-xl" />

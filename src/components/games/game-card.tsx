@@ -1,19 +1,19 @@
-import Image from "next/image"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Game } from "@/lib/api/types"
-import { useRouter } from "next/navigation"
-import { Star } from "lucide-react"
+import Image from "next/image";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Game } from "@/lib/api/types";
+import { useRouter } from "next/navigation";
+import { Star } from "lucide-react";
 
 interface GameCardProps {
   game: Game
 }
 
 export function GameCard({ game }: GameCardProps) {
-  const router = useRouter()
+  const router = useRouter();
 
   // Pega os primeiros 2 gêneros para exibir, se existirem
-  const genresToShow = game.genres ? game.genres.slice(0, 2) : []
+  const genresToShow = game.genres ? game.genres.slice(0, 2) : [];
 
   return (
     <Card
@@ -48,6 +48,6 @@ export function GameCard({ game }: GameCardProps) {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 

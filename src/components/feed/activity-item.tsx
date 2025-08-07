@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { Activity } from "@/lib/api/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,7 +12,6 @@ interface ActivityItemProps {
 }
 
 export function ActivityItem({ activity }: ActivityItemProps) {
-
   const router = useRouter();
 
   const formatDate = (dateString: string) => {
@@ -52,7 +51,9 @@ export function ActivityItem({ activity }: ActivityItemProps) {
         return (
           <>
             criou uma nova lista:{" "}
-            <span className="font-semibold">"{activity.targetList?.name}"</span>
+            <span className="font-semibold">
+              &quot;{activity.targetList?.name}&quot;
+            </span>
           </>
         );
       case "game_status_update":
@@ -92,7 +93,12 @@ export function ActivityItem({ activity }: ActivityItemProps) {
         <div className="flex items-start gap-2">
           <div className="flex-1">
             <div className="text-sm leading-relaxed">
-              <span className="font-semibold text-foreground hover:underline hover:cursor-pointer" onClick={() => router.push(`/profile/${activity.user.username}`)}>
+              <span
+                className="font-semibold text-foreground hover:underline hover:cursor-pointer"
+                onClick={() =>
+                  router.push(`/profile/${activity.user.username}`)
+                }
+              >
                 {activity.user.username}
               </span>{" "}
               {getActivityText(activity)}
@@ -100,7 +106,7 @@ export function ActivityItem({ activity }: ActivityItemProps) {
             {activity.type === "new_review" && activity.contentSnippet && (
               <div className="mt-2 p-3 bg-muted/50 rounded-md border-l-2 border-blue-500">
                 <p className="text-sm text-muted-foreground italic">
-                  "{activity.contentSnippet}"
+                  &quot;{activity.contentSnippet}&quot;
                 </p>
               </div>
             )}

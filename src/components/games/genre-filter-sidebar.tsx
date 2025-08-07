@@ -1,10 +1,10 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from "react"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Button } from "@/components/ui/button"
-import { GENRES } from "@/lib/constants/genres"
+import { useState, useEffect } from "react";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { GENRES } from "@/lib/constants/genres";
 
 interface GenreFilterSidebarProps {
   appliedGenres: string[]
@@ -15,20 +15,20 @@ export function GenreFilterSidebar({
   appliedGenres,
   onApply,
 }: GenreFilterSidebarProps) {
-  const [pendingGenres, setPendingGenres] = useState(appliedGenres)
+  const [pendingGenres, setPendingGenres] = useState(appliedGenres);
 
   useEffect(() => {
-    setPendingGenres(appliedGenres)
-  }, [appliedGenres])
+    setPendingGenres(appliedGenres);
+  }, [appliedGenres]);
 
   const handleGenreChange = (genreId: string, isSelected: boolean) => {
     setPendingGenres((prev) => {
       if (isSelected) {
-        return [...prev, genreId]
+        return [...prev, genreId];
       }
-      return prev.filter((id) => id !== genreId)
-    })
-  }
+      return prev.filter((id) => id !== genreId);
+    });
+  };
 
   return (
     <aside className="w-full md:w-64 rounded-lg border p-4">
@@ -40,7 +40,7 @@ export function GenreFilterSidebar({
               id={genre}
               checked={pendingGenres.includes(genre)}
               onCheckedChange={(checked) => {
-                handleGenreChange(genre, !!checked)
+                handleGenreChange(genre, !!checked);
               }}
             />
             <Label
@@ -56,5 +56,5 @@ export function GenreFilterSidebar({
         Aplicar Filtros
       </Button>
     </aside>
-  )
+  );
 }

@@ -1,20 +1,20 @@
-'use client'
+"use client";
 
-import { useState } from "react"
-import { Search } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 interface UserSearchBarProps {
   onSearchChange: (term: string) => void
 }
 
 export function UserSearchBar({ onSearchChange }: UserSearchBarProps) {
-  const [searchTerm, setSearchTerm] = useState("")
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = () => {
-    onSearchChange(searchTerm)
-  }
+    onSearchChange(searchTerm);
+  };
 
   return (
     <div className="flex w-full max-w-md gap-2">
@@ -29,5 +29,5 @@ export function UserSearchBar({ onSearchChange }: UserSearchBarProps) {
         <Search className="h-4 w-4" />
       </Button>
     </div>
-  )
+  );
 }

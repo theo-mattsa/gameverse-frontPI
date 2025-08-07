@@ -1,41 +1,41 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from "react"
-import { User } from "@/lib/api/types"
-import { userService } from "@/lib/api/user-service"
-import { UserCard } from "@/components/users/user-card"
-import { UserSearchBar } from "@/components/users/user-search-bar"
-import { useAuth } from "@/contexts/auth-context"
+import { useEffect, useState } from "react";
+import { User } from "@/lib/api/types";
+import { userService } from "@/lib/api/user-service";
+import { UserCard } from "@/components/users/user-card";
+import { UserSearchBar } from "@/components/users/user-search-bar";
+import { useAuth } from "@/contexts/auth-context";
 
 export default function UsersPage() {
-  const { user: currentUser } = useAuth()
-  const [allUsers, setAllUsers] = useState<User[]>([])
-  const [searchTerm, setSearchTerm] = useState("")
-  const [isLoading, setIsLoading] = useState(true)
+  const { user: currentUser } = useAuth();
+  const [allUsers, setAllUsers] = useState<User[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        setIsLoading(true)
-        const fetchedUsers = await userService.getAllUsers()
-        setAllUsers(fetchedUsers)
+        setIsLoading(true);
+        const fetchedUsers = await userService.getAllUsers();
+        setAllUsers(fetchedUsers);
       } catch (error) {
-        console.error("Failed to fetch users:", error)
+        console.error("Failed to fetch users:", error);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
-    fetchUsers()
-  }, [])
+    };
+    fetchUsers();
+  }, []);
 
   const handleSearchChange = (term: string) => {
-    setSearchTerm(term)
-  }
+    setSearchTerm(term);
+  };
 
   const filteredUsers = allUsers.filter((user) =>
     user.username.toLowerCase().includes(searchTerm.toLowerCase()) &&
     user.username !== currentUser?.username
-  )
+  );
 
   return (
     <div className="container mx-auto p-4 md:p-8">
@@ -49,5 +49,5 @@ export default function UsersPage() {
           : filteredUsers.map((user) => <UserCard key={user.id} user={user} />)}
       </div>
     </div>
-  )
+  );
 }

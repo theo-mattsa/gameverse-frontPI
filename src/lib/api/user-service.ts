@@ -10,10 +10,10 @@ export const userService = {
     bio: string | null,
     foto: string | null
   ): Promise<void> {
-    await api.put(`/me`, { foto, bio });
+    await api.put("/me", { foto, bio });
   },
   async getAllUsers(): Promise<User[]> {
-    const res = await api.get<User[]>(`/users`);
+    const res = await api.get<User[]>("/users");
     return res.data;
   },
 };

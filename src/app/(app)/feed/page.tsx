@@ -1,31 +1,32 @@
-'use client';
+"use client";
 
 import { ActivityItem } from "@/components/feed/activity-item";
 import { FeedService } from "@/lib/api/feed-service";
 import { Activity } from "@/lib/api/types";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useApi } from "@/hooks/use-api";
 import { toast } from "sonner";
 
 export default function FeedPage() {
   const [activities, setActivities] = useState<Activity[] | null>([]);
-  const activitiesApi = useApi<Activity[]>();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchActivities() {
       try {
-        const result = await activitiesApi.execute(() => FeedService.getActivities())
+        const result = await FeedService.getActivities();
         setActivities(result);
       } catch (error) {
-        console.error("Error fetching activities:", activitiesApi.error);
-        activitiesApi.error && toast.error(activitiesApi.error);
+        console.error("Error fetching activities:", error);
+        toast.error("Erro ao carregar atividades do feed.");
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchActivities();
   }, []);
 
-  if (activitiesApi.isLoading) {
+  if (isLoading) {
     Array.from({ length: 3 }).map((_, idx) => (
       <div
         key={idx}
@@ -51,7 +52,9 @@ export default function FeedPage() {
           ) : (
             <div className="space-y-4">
               {activities?.length === 0 && (
-                <p className="text-muted-foreground">Nenhuma atividade recente.</p>
+                <p className="text-muted-foreground">
+                  Nenhuma atividade recente.
+                </p>
               )}
               {activities?.map((activity, index) => (
                 <ActivityItem key={index} activity={activity} />
@@ -62,6 +65,4 @@ export default function FeedPage() {
       </div>
     );
   }
-
-
 }

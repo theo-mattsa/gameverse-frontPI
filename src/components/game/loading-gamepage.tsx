@@ -46,5 +46,5 @@ export default function LoadingGamePage() {
           </div>
         </div>
       </div>
-  )
+  );
 }
