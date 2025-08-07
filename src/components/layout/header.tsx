@@ -73,7 +73,7 @@ export default function Header() {
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
+            <DropdownMenuContent className="w-56 bg-background" align="end" forceMount>
               <DropdownMenuItem asChild>
                 <Link
                   className="cursor-pointer"
