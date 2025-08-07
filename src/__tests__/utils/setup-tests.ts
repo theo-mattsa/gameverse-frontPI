@@ -1,17 +1,23 @@
+/**
+ * @fileoverview Arquivo de configuração global para o Jest.
+ * Este arquivo é executado automaticamente antes de todos os testes. Ele importa `jest-dom` para adicionar
+ * matchers focados no DOM e pode ser usado para configurar mocks globais ou limpar estados entre os testes.
+ */
+
 import '@testing-library/jest-dom'
 
 // Global test setup configuration
 beforeEach(() => {
   // Clear all mocks before each test
   jest.clearAllMocks()
-  
+
   // Reset DOM state
   document.body.innerHTML = ''
-  
+
   // Clear localStorage and sessionStorage
   localStorage.clear()
   sessionStorage.clear()
-  
+
   // Reset any global state that might affect tests
   if (global.fetch && typeof global.fetch === 'function' && 'mockClear' in global.fetch) {
     (global.fetch as jest.MockedFunction<typeof fetch>).mockClear()
@@ -21,10 +27,10 @@ beforeEach(() => {
 afterEach(() => {
   // Clean up after each test
   jest.restoreAllMocks()
-  
+
   // Clean up any timers
   jest.clearAllTimers()
-  
+
   // Clean up any pending promises
   jest.runOnlyPendingTimers()
 })
@@ -130,14 +136,14 @@ const originalConsoleError = console.error
 beforeAll(() => {
   // Use fake timers for consistent testing
   jest.useFakeTimers()
-  
+
   console.warn = (...args: any[]) => {
     if (
       typeof args[0] === 'string' &&
       (args[0].includes('Warning: ReactDOM.render is deprecated') ||
-       args[0].includes('Warning: React.createFactory') ||
-       args[0].includes('componentWillReceiveProps') ||
-       args[0].includes('componentWillMount'))
+        args[0].includes('Warning: React.createFactory') ||
+        args[0].includes('componentWillReceiveProps') ||
+        args[0].includes('componentWillMount'))
     ) {
       return
     }
@@ -147,9 +153,9 @@ beforeAll(() => {
   console.error = (...args: any[]) => {
     if (
       typeof args[0] === 'string' &&
-      (args[0].includes('Warning:') || 
-       args[0].includes('The above error occurred') ||
-       args[0].includes('Consider adding an error boundary'))
+      (args[0].includes('Warning:') ||
+        args[0].includes('The above error occurred') ||
+        args[0].includes('Consider adding an error boundary'))
     ) {
       return
     }
@@ -160,7 +166,7 @@ beforeAll(() => {
 afterAll(() => {
   // Restore real timers
   jest.useRealTimers()
-  
+
   // Restore console methods
   console.warn = originalConsoleWarn
   console.error = originalConsoleError

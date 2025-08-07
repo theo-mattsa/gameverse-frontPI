@@ -1,3 +1,10 @@
+/**
+ * @fileoverview Utilitário de renderização personalizado para testes.
+ * Exporta uma função `render` que envolve automaticamente os componentes com os providers necessários
+ * da aplicação (ex: ThemeProvider, AuthProvider). Isso simplifica os arquivos de teste, evitando
+ * a configuração repetitiva de providers em cada um deles.
+ */
+
 import React, { ReactElement } from 'react'
 import { render, RenderOptions } from '@testing-library/react'
 import { AuthProvider } from '@/contexts/auth-context'

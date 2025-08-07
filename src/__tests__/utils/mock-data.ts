@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Fábrica de dados falsos (mock data) para os testes.
+ * Exporta funções que geram dados consistentes e previsíveis para os testes (ex: usuários, jogos).
+ * Isso evita a repetição de objetos mock em cada teste e garante que os dados de teste sejam padronizados.
+ */
+
 import { 
   Game, 
   User, 

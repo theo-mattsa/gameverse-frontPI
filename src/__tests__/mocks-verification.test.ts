@@ -1,4 +1,10 @@
 /**
+ * @fileoverview Teste de verificação para todos os mocks da aplicação.
+ * Este arquivo garante que os "dublês" (mocks) para serviços de API, hooks do Next.js e contextos do React
+ * estão sendo carregados e funcionam como esperado. Serve como um ponto central para validar a infraestrutura de mocking.
+ */
+
+/**
  * Test to verify that all mocks are working correctly
  */
 

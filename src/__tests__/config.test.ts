@@ -1,3 +1,10 @@
+/**
+ * @fileoverview Teste de sanidade para a configuração do Jest.
+ * Este arquivo verifica se as configurações essenciais do ambiente de teste estão funcionando corretamente,
+ * como os mapeamentos de caminho (path aliases) e a integração com a biblioteca jest-dom.
+ * Não testa a lógica da aplicação, mas sim a saúde da infraestrutura de testes.
+ */
+
 // Simple test to verify Jest configuration and path mapping
 import { cn } from '@/lib/utils'
 

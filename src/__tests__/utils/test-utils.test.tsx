@@ -1,3 +1,10 @@
+/**
+ * @fileoverview Testes para os utilitários de teste.
+ * Este arquivo testa as próprias ferramentas que ajudam a escrever outros testes, como as funções de renderização
+ * personalizadas (render, renderUnauthenticated) e os geradores de dados falsos (mockUser, mockGames).
+ * Garante que a base para escrever testes de componentes está sólida e confiável.
+ */
+
 import React from 'react'
 import { screen } from '@testing-library/react'
 import { render, renderWithoutAuth, renderUnauthenticated, renderWithLoading } from './test-utils'
