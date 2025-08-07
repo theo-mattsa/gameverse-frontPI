@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/contexts/auth-context";
-import { LogOut, Swords, User } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -61,7 +61,6 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-4">
-
           <ThemeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -93,8 +92,7 @@ export default function Header() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-      </div>
-
+        </div>
       </div>
       <div className="md:hidden border-t px-4 py-3">
         <nav className="flex items-center justify-between">

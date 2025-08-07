@@ -28,7 +28,6 @@ import { useDebounce } from "@/hooks/use-debounce";
 import { gameService } from "@/lib/api/game-service";
 import { Skeleton } from "../ui/skeleton";
 import { Game } from "@/lib/api/types";
-import { useApi } from "@/hooks/use-api";
 import { toast } from "sonner";
 import { Label } from "../ui/label";
 
@@ -57,10 +56,9 @@ export function CreateListModal({
   const [games, setGames] = useState<Game[]>([]);
   const [selectedGameObjects, setSelectedGameObjects] = useState<Game[]>([]);
   const selectedGames = watch("games");
-  const gameApi = useApi<Game[]>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const debouncedSearch = useDebounce(search, 500);
-
 
   useEffect(() => {
     if (!open) {
@@ -75,14 +73,15 @@ export function CreateListModal({
     if (debouncedSearch.trim().length === 0) return;
     async function fetchGames() {
       try {
-        const data = await gameApi.execute(() =>
-          gameService.getGameBySubstring(debouncedSearch)
-        );
+        setIsLoading(true);
+        const data = await gameService.getGameBySubstring(debouncedSearch);
         setGames(data);
       } catch (error) {
         console.error("Erro ao buscar jogos:", error);
-        toast.error(gameApi?.error || "Erro ao buscar jogos");
+        toast.error("Erro ao buscar jogos");
         setGames([]);
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchGames();
@@ -148,14 +147,15 @@ export function CreateListModal({
                 onValueChange={setSearch}
               />
               <CommandList>
-                {gameApi.isLoading ? (
+                {isLoading ? (
                   <div className="p-2 space-y-2">
                     <Skeleton className="h-4 w-3/4" />
                     <Skeleton className="h-4 w-1/2" />
                     <Skeleton className="h-4 w-full" />
                   </div>
-                ) : debouncedSearch.length > 0 && (
-                  games.length > 0 ? (
+                ) : (
+                  debouncedSearch.length > 0 &&
+                  (games.length > 0 ? (
                     games.map((game) => (
                       <CommandItem
                         key={game.id}
@@ -166,7 +166,7 @@ export function CreateListModal({
                     ))
                   ) : (
                     <CommandEmpty>Nenhum jogo encontrado.</CommandEmpty>
-                  )
+                  ))
                 )}
               </CommandList>
             </Command>

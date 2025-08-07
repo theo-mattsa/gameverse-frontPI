@@ -1,38 +1,39 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from "react"
-import { GamesGrid } from "@/components/games/games-grid"
-import { GenreFilterSidebar } from "@/components/games/genre-filter-sidebar"
-import { GameSearchBar } from "@/components/games/game-search-bar"
-import { gameService } from "@/lib/api/game-service"
-import { Game } from "@/lib/api/types"
-import { useApi } from "@/hooks/use-api"
+import { useEffect, useState } from "react";
+import { GamesGrid } from "@/components/games/games-grid";
+import { GenreFilterSidebar } from "@/components/games/genre-filter-sidebar";
+import { GameSearchBar } from "@/components/games/game-search-bar";
+import { gameService } from "@/lib/api/game-service";
+import { Game } from "@/lib/api/types";
 
 export default function GamesPage() {
-  const [appliedGenres, setAppliedGenres] = useState<string[]>([])
-  const [allGames, setAllGames] = useState<Game[]>([])
-  const [searchTerm, setSearchTerm] = useState("")
-  const gamesApi = useApi<Game[]>()
+  const [appliedGenres, setAppliedGenres] = useState<string[]>([]);
+  const [allGames, setAllGames] = useState<Game[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchGames = async () => {
       try {
-        const result = await gamesApi.execute(() => gameService.getAllGames())
-        setAllGames(result)
+        const result = await gameService.getAllGames();
+        setAllGames(result);
       } catch (error) {
-        console.error("Failed to fetch games:", error)
+        console.error("Failed to fetch games:", error);
+      } finally {
+        setIsLoading(false);
       }
-    }
-    fetchGames()
-  }, [])
+    };
+    fetchGames();
+  }, []);
 
   const handleApplyFilters = (genres: string[]) => {
-    setAppliedGenres(genres)
-  }
+    setAppliedGenres(genres);
+  };
 
   const handleSearchChange = (term: string) => {
-    setSearchTerm(term)
-  }
+    setSearchTerm(term);
+  };
 
   const filteredGames = allGames
     .filter((game) =>
@@ -40,15 +41,13 @@ export default function GamesPage() {
     )
     .filter((game) => {
       if (appliedGenres.length === 0) {
-        return true
+        return true;
       }
       if (!game.genres) {
-        return false
+        return false;
       }
-      return game.genres.some((genre) =>
-        appliedGenres.includes(genre)
-      )
-    })
+      return game.genres.some((genre) => appliedGenres.includes(genre));
+    });
 
   return (
     <div className="p-8 space-y-6 max-w-7xl mx-auto">
@@ -61,10 +60,9 @@ export default function GamesPage() {
           onApply={handleApplyFilters}
         />
         <main className="flex-1">
-          <GamesGrid games={filteredGames} isLoading={gamesApi.isLoading} />
+          <GamesGrid games={filteredGames} isLoading={isLoading} />
         </main>
       </div>
     </div>
-  )
+  );
 }
-

@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "next lint --fix",
     "test": "vitest",
     "type-docs": "npx typedoc"
   },
@@ -53,11 +53,12 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.3.5",
+    "eslint-config-prettier": "^10.1.8",
     "jsdom": "^26.1.0",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.5",
+    "typedoc": "^0.28.8",
     "typescript": "^5",
-    "vitest": "^3.2.4",
-    "typedoc": "^0.28.8"
+    "vitest": "^3.2.4"
   }
 }

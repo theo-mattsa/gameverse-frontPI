@@ -30,7 +30,6 @@ export function EditProfileModal({
 }: EditProfileModalProps) {
   const [bio, setBio] = useState(currentBio);
   const [foto, setFoto] = useState<string | null>(currentFoto || null);
-  const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -39,13 +38,11 @@ export function EditProfileModal({
     const base64 = await fileToBase64(file);
     if (base64) {
       setFoto(base64);
-      setFile(file);
     }
   }
 
   function handleRemoveFoto() {
     setFoto(null);
-    setFile(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   }
 

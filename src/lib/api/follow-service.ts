@@ -10,11 +10,11 @@ export const followService = {
     await api.delete(`follow/${userId}`);
   },
   async getFollowers(): Promise<Follower[]> {
-    const res = await api.get<Follower[]>(`follow/followers`);
+    const res = await api.get<Follower[]>("follow/followers");
     return res.data;
   },
   async getFollowing(): Promise<Follower[]> {
-    const res = await api.get<Follower[]>(`follow/following`);
+    const res = await api.get<Follower[]>("follow/following");
     return res.data;
   },
   async checkIfFollowing(userId: string): Promise<boolean> {

@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useApi } from "@/hooks/use-api";
 import { authService } from "@/lib/api/auth";
 import { signUpSchema, SignUpSchema } from "@/lib/schemas/signup-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,12 +13,10 @@ import { toast } from "sonner";
 
 export default function SignUpPage() {
   const router = useRouter();
-  const signUpApi = useApi<void>();
 
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm<SignUpSchema>({
     resolver: zodResolver(signUpSchema),
@@ -30,12 +27,9 @@ export default function SignUpPage() {
     },
   });
 
-  // TO-DO Check the username in real-time
-  const username = watch("username");
-
   async function onSubmit(data: SignUpSchema) {
     try {
-      const result = await signUpApi.execute(() => authService.signUp(data));
+      await authService.signUp(data);
       toast.success("Usuário cadastrado com sucesso!");
       router.push("/login");
     } catch (error) {

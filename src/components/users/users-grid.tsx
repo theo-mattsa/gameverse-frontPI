@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import { User } from "@/lib/api/types"
-import { Skeleton } from "@/components/ui/skeleton"
-import { UserCard } from "./user-card"
+import { User } from "@/lib/api/types";
+import { Skeleton } from "@/components/ui/skeleton";
+import { UserCard } from "./user-card";
 
 interface UsersGridProps {
   users: User[]
@@ -20,7 +20,7 @@ export function UsersGrid({ users, isLoading }: UsersGridProps) {
           </div>
         ))}
       </div>
-    )
+    );
   }
 
   if (users.length === 0) {
@@ -28,7 +28,7 @@ export function UsersGrid({ users, isLoading }: UsersGridProps) {
       <div className="text-center py-12">
         <p className="text-muted-foreground">Nenhum usuário encontrado</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -37,5 +37,5 @@ export function UsersGrid({ users, isLoading }: UsersGridProps) {
         <UserCard key={user.id} user={user} />
       ))}
     </div>
-  )
+  );
 }
