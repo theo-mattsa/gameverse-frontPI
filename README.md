@@ -9,7 +9,7 @@
 ## Ferramentas escolhidas
 
 - Versionamento de código: Git
-- Teste unitários e de integração: Vitest
+- Teste unitários e de integração: Jest
 - Issue tracking: Jira
 - CI/CD: Github Actions
 - Deploy front-end: Vercel
