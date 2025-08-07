@@ -39,6 +39,8 @@ jobs:
       # 5. Executar os testes com cobertura
       - name: Executar testes
         run: pnpm run test:ci
+        env:
+          CI: true
 
       # 6. (Opcional) Upload do relatório de cobertura
       - name: Upload cobertura para Codecov
