@@ -34,11 +34,11 @@ jobs:
 
       # 4. Instalar dependências
       - name: Instalar dependências
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       # 5. Executar os testes com cobertura
       - name: Executar testes
-        run: pnpm run test:ci
+        run: pnpm run test
 
       # 6. (Opcional) Upload do relatório de cobertura
       - name: Upload cobertura para Codecov
