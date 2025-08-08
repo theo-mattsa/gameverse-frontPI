@@ -5,11 +5,12 @@ import { Label } from "@/components/ui/label";
 import { authService } from "@/lib/api/auth";
 import { signUpSchema, SignUpSchema } from "@/lib/schemas/signup-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Swords } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import Image from "next/image";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -41,10 +42,12 @@ export default function SignUpPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen mx-auto gap-4 md:gap-8 w-full max-w-4xl px-4 md:px-8">
       <div className="flex flex-col items-center gap-2">
-        <Swords className="w-12 h-12 md:w-16 md:h-16 transition-transform duration-1000 hover:rotate-360" />
-        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center">
-          Comece sua jornada agora!
-        </h1>
+        <Image
+          src="/logo-completa.png"
+          alt="GameVerse Logo"
+          width={200}
+          height={100}
+        />
         <p className="text-sm md:text-base text-center text-gray-600">
           Crie sua conta para acessar todos os recursos do GameVerse
         </p>

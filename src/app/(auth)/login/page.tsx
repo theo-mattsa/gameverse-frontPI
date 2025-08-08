@@ -44,11 +44,11 @@ export default function LoginPage() {
     <div className="flex flex-col items-center justify-center min-h-screen mx-auto gap-4 md:gap-8 w-full max-w-4xl px-4 md:px-8">
       <div className="flex flex-col items-center gap-2">
         <Image
-            src="/logo-completa.png"
-            alt="GameVerse Logo"
-            width={180}
-            height={90}
-          />
+          src="/logo-completa.png"
+          alt="GameVerse Logo"
+          width={200}
+          height={100}
+        />
         <p className="text-sm md:text-base text-center text-gray-600">
           Entre com suas credenciais para acessar sua conta
         </p>
