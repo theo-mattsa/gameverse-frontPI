@@ -56,7 +56,7 @@ export default function ProfilePage() {
                 >
                   <CardContent className="flex flex-col">
                     <Image
-                      src={"/vercel.svg"}
+                      src={game.foto}
                       alt={game.name}
                       width={150}
                       height={150}
