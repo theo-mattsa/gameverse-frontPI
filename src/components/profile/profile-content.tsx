@@ -18,9 +18,14 @@ import { GameList, RatingByUserId } from "@/lib/api/types";
 interface ProfileContentProps {
   lists: GameList[];
   reviews: RatingByUserId[];
+  isOwnProfile?: boolean;
 }
 
-export function ProfileContent({ lists, reviews }: ProfileContentProps) {
+export function ProfileContent({
+  lists,
+  reviews,
+  isOwnProfile = false,
+}: ProfileContentProps) {
   const router = useRouter();
   const [selectedView, setSelectedView] = useState<"lists" | "reviews">(
     "lists"
@@ -62,7 +67,7 @@ export function ProfileContent({ lists, reviews }: ProfileContentProps) {
             <SelectItem value="reviews">Reviews criados</SelectItem>
           </SelectContent>
         </Select>
-        {selectedView === "lists" && (
+        {selectedView === "lists" && isOwnProfile && (
           <button
             className="bg-primary text-primary-foreground px-4 py-2 rounded hover:bg-primary/90 transition-colors"
             onClick={() => setOpenModal(true)}
@@ -89,11 +94,13 @@ export function ProfileContent({ lists, reviews }: ProfileContentProps) {
               </Card>
             ))}
           </ul>
-          <CreateListModal
-            open={openModal}
-            onOpenChange={setOpenModal}
-            onCreate={handleCreateList}
-          />
+          {isOwnProfile && (
+            <CreateListModal
+              open={openModal}
+              onOpenChange={setOpenModal}
+              onCreate={handleCreateList}
+            />
+          )}
         </>
       ) : (
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">

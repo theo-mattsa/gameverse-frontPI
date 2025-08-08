@@ -16,8 +16,15 @@ export default function ProfilePage() {
   const username = params?.username as string;
   const { user, updateUser } = useAuth();
 
-  const { profileUser, lists, reviews, isLoading, error, setProfileUser, favoriteGenre } =
-    useProfileData(username);
+  const {
+    profileUser,
+    lists,
+    reviews,
+    isLoading,
+    error,
+    setProfileUser,
+    favoriteGenre,
+  } = useProfileData(username);
 
   if (isLoading) {
     return <ProfileSkeleton />;
@@ -67,7 +74,11 @@ export default function ProfilePage() {
         favoriteGenre={favoriteGenre}
       />
 
-      <ProfileContent lists={lists} reviews={reviews} />
+      <ProfileContent
+        lists={lists}
+        reviews={reviews}
+        isOwnProfile={isCurrentUser}
+      />
     </div>
   );
 }
