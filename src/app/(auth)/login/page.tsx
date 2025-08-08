@@ -6,7 +6,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { authService } from "@/lib/api/auth";
 import { loginSchema, LoginSchema } from "@/lib/schemas/login-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Swords } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
