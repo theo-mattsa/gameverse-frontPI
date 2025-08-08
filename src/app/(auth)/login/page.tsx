@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import Image from "next/image";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -46,6 +47,12 @@ export default function LoginPage() {
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center">
           Bem-vindo!
         </h1>
+        <Image
+            src="/logo-completa.png"
+            alt="GameVerse Logo"
+            width={160}
+            height={80}
+          />
         <p className="text-sm md:text-base text-center text-gray-600">
           Entre com suas credenciais para acessar sua conta
         </p>
