@@ -15,7 +15,7 @@ import Image from "next/image";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { user, login } = useAuth();
 
   const {
     register,
@@ -34,6 +34,10 @@ export default function LoginPage() {
       const result = await authService.signIn(data.email, data.password);
       await login(result.token);
       toast.success("Login realizado com sucesso!");
+      if (user?.role === "ADMIN") {
+        router.push("/admin");
+        return;
+      }
       router.push("/feed");
     } catch (error) {
       console.error("Erro ao fazer login:", error);

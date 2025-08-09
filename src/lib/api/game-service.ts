@@ -17,12 +17,16 @@ export const gameService = {
   async createGame(
     name: string,
     foto: string,
-    releaseDate: string
+    releaseDate: string,
+    platforms: string[],
+    genres: string[]
   ): Promise<void> {
     await api.post("/game", {
       name,
       foto,
       releaseDate,
+      platforms,
+      genres,
     });
   },
 };

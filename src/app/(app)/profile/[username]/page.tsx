@@ -1,6 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { useState } from "react";
 import { useAuth } from "@/contexts/auth-context";
 import { useProfileData } from "@/hooks/use-profile-data";
 
@@ -15,6 +16,7 @@ export default function ProfilePage() {
   const params = useParams();
   const username = params?.username as string;
   const { user, updateUser } = useAuth();
+  const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
 
   const {
     profileUser,
@@ -43,7 +45,9 @@ export default function ProfilePage() {
   const isCurrentUser = user?.username === profileUser.username;
 
   async function handleSaveProfile(newBio: string, newFoto: string | null) {
-    if (!user) return;
+    if (!user || isUpdatingProfile) return;
+
+    setIsUpdatingProfile(true);
     try {
       await userService.updateUserProfile(
         newBio,
@@ -57,6 +61,8 @@ export default function ProfilePage() {
     } catch (error) {
       console.error("Erro ao atualizar perfil:", error);
       toast.error("Erro ao atualizar perfil. Tente novamente mais tarde.");
+    } finally {
+      setIsUpdatingProfile(false);
     }
   }
 

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Loader2 } from "lucide-react";
 import {
   ReviewFormData,
   reviewSchema,
@@ -15,8 +16,10 @@ import {
 
 export default function ReviewForm({
   onSubmit,
+  isLoading = false,
 }: {
   onSubmit: (data: ReviewFormData) => void;
+  isLoading?: boolean;
 }) {
   const {
     register,
@@ -73,7 +76,10 @@ export default function ReviewForm({
             </p>
           </div>
 
-          <Button type="submit">Enviar Avaliação</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isLoading ? "Enviando..." : "Enviar Avaliação"}
+          </Button>
         </form>
       </CardContent>
     </Card>

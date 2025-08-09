@@ -15,16 +15,19 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 
-const navItems = [
-  { href: "/feed", label: "Feed" },
-  { href: "/games", label: "Jogos" },
-  { href: "/users", label: "Usuários" },
-];
-
 export default function Header() {
   const { user, logout } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+
+  const navItems =
+    user?.role === "ADMIN"
+      ? [{ href: "/admin", label: "Admin" }]
+      : [
+          { href: "/feed", label: "Feed" },
+          { href: "/games", label: "Jogos" },
+          { href: "/users", label: "Usuários" },
+        ];
 
   const handleLogout = () => {
     logout();
@@ -73,7 +76,11 @@ export default function Header() {
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
+            <DropdownMenuContent
+              className="w-56 bg-background"
+              align="end"
+              forceMount
+            >
               <DropdownMenuItem asChild>
                 <Link
                   className="cursor-pointer"

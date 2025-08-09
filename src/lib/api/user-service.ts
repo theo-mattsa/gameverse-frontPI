@@ -16,4 +16,10 @@ export const userService = {
     const res = await api.get<User[]>("/users");
     return res.data;
   },
+  async deleteUser(userId: string): Promise<void> {
+    await api.delete(`/user/${userId}`);
+  },
+  async updateUser(userId: string, userData: Partial<User>): Promise<void> {
+    await api.put(`/user/${userId}`, userData);
+  }
 };
