@@ -171,9 +171,10 @@ export default function AdminGamesPage() {
                       <AlertDialogHeader>
                         <AlertDialogTitle>Confirmar remoção</AlertDialogTitle>
                         <AlertDialogDescription>
-                          Tem certeza que deseja remover o jogo "{game.name}"?
-                          Esta ação não pode ser desfeita e todos os dados
-                          relacionados ao jogo serão perdidos permanentemente.
+                          Tem certeza que deseja remover o jogo &ldquo;
+                          {game.name}&rdquo;? Esta ação não pode ser desfeita e
+                          todos os dados relacionados ao jogo serão perdidos
+                          permanentemente.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
