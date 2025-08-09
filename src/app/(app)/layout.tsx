@@ -16,6 +16,24 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     }
   }, [isAuthenticated, isLoading, router]);
 
+  useEffect(() => {
+    if (!isLoading && user) {
+      const currentPath = window.location.pathname;
+      if (
+        user.role === "ADMIN" &&
+        (currentPath.startsWith("/feed") ||
+          currentPath.startsWith("/games") ||
+          currentPath.startsWith("/users") ||
+          currentPath.startsWith("/profile"))
+      ) {
+        router.push("/admin");
+      }
+      if (user.role === "USER" && currentPath.startsWith("/admin")) {
+        router.push("/feed");
+      }
+    }
+  }, [user, isLoading, router]);
+
   // Loading enquanto verifica autenticação
   if (isLoading) {
     return (

@@ -28,7 +28,7 @@ export interface Activity {
     id: string;
     name: string;
   };
-  contentSnippet?: string; // Optional, used for new_rating and game_status_update
+  contentSnippet?: string; 
 }
 
 export interface Game {
@@ -48,6 +48,7 @@ export interface User {
   username: string;
   foto: string | null;
   bio?: string | null;
+  role: "USER" | "ADMIN";
 }
 
 

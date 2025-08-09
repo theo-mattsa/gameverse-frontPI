@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Star } from "lucide-react";
 
 interface GameCardProps {
-  game: Game
+  game: Game;
 }
 
 export function GameCard({ game }: GameCardProps) {
@@ -24,9 +24,15 @@ export function GameCard({ game }: GameCardProps) {
     >
       <CardContent className="p-0">
         <div className="relative aspect-[3/4] bg-muted overflow-hidden">
-          <Image src={game.foto} alt={`${game.name}`} fill />
+          <Image
+            src={game.foto}
+            alt={`${game.name}`}
+            fill
+            className="object-contain"
+            style={{ objectFit: "contain" }}
+          />
         </div>
-        <div className="p-3 space-y-2"> 
+        <div className="p-3 space-y-2">
           <h3 className="font-semibold text-sm leading-tight line-clamp-2 group-hover:text-primary transition-colors">
             {game.name}
           </h3>
@@ -50,4 +56,3 @@ export function GameCard({ game }: GameCardProps) {
     </Card>
   );
 }
-

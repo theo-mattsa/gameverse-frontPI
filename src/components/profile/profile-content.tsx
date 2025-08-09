@@ -79,29 +79,35 @@ export function ProfileContent({
       </div>
 
       {selectedView === "lists" ? (
-        <>
-          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {lists.map((list) => (
-              <Card
-                key={list.id}
-                className="p-4 cursor-pointer hover:bg-accent transition-colors"
-                onClick={() => router.push(`/list/${list.id}`)}
-              >
-                <span className="font-semibold text-lg">{list.title}</span>
-                <p className="text-muted-foreground text-sm">
-                  {list.games.length} jogos
-                </p>
-              </Card>
-            ))}
-          </ul>
-          {isOwnProfile && (
-            <CreateListModal
-              open={openModal}
-              onOpenChange={setOpenModal}
-              onCreate={handleCreateList}
-            />
-          )}
-        </>
+        lists.length === 0 ? (
+          <p className="text-muted-foreground">Nenhuma lista criada ainda.</p>
+        ) : (
+          <>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {lists.map((list) => (
+                <Card
+                  key={list.id}
+                  className="p-4 cursor-pointer hover:bg-accent transition-colors"
+                  onClick={() => router.push(`/list/${list.id}`)}
+                >
+                  <span className="font-semibold text-lg">{list.title}</span>
+                  <p className="text-muted-foreground text-sm">
+                    {list.games.length} jogos
+                  </p>
+                </Card>
+              ))}
+            </ul>
+            {isOwnProfile && (
+              <CreateListModal
+                open={openModal}
+                onOpenChange={setOpenModal}
+                onCreate={handleCreateList}
+              />
+            )}
+          </>
+        )
+      ) : reviews.length === 0 ? (
+        <p className="text-muted-foreground">Nenhuma review criada ainda.</p>
       ) : (
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {reviews.map((review) => (

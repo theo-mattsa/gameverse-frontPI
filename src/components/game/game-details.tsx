@@ -13,7 +13,13 @@ import { ratingService } from "@/lib/api/rating-service";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/auth-context";
 import { useRouter } from "next/navigation";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { gameStatusService } from "@/lib/api/game-status-service";
 import { useEffect, useState } from "react";
 
@@ -26,6 +32,7 @@ export function GameDetails({ game, reviews }: GameDetails) {
   const { user } = useAuth();
   const router = useRouter();
   const [status, setStatus] = useState<GameStatus | null>(null);
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
 
   async function handleStatusChange(status: GameStatus) {
     try {
@@ -47,6 +54,9 @@ export function GameDetails({ game, reviews }: GameDetails) {
   }, [game.id]);
 
   async function onSubmitReview(data: ReviewFormData) {
+    if (isSubmittingReview) return;
+
+    setIsSubmittingReview(true);
     try {
       await ratingService.createRating(
         data.content,
@@ -60,6 +70,8 @@ export function GameDetails({ game, reviews }: GameDetails) {
     } catch (error) {
       console.error("Failed to submit review:", error);
       toast.error("Falha ao registrar a review.");
+    } finally {
+      setIsSubmittingReview(false);
     }
   }
 
@@ -68,17 +80,20 @@ export function GameDetails({ game, reviews }: GameDetails) {
       <div className="flex flex-col md:flex-row gap-8">
         {/* Dados do jogo */}
         <div className="md:w-1/3">
-          <div className="w-48 h-64 rounded-lg overflow-hidden shadow-lg mx-auto md:mx-0">
+          <div className="w-48 h-64 rounded-lg overflow-hidden shadow-lg mx-auto md:mx-0 bg-muted flex items-center justify-center">
             <Image
               src={game.foto}
               alt={game.name}
               width={192}
               height={256}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover rounded-lg"
+              style={{ objectFit: "cover" }}
             />
           </div>
-          <h1 className="text-3xl font-bold mt-4 mb-2 text-center md:text-left">{game.name}</h1>
-          {game.averageRating && (
+          <h1 className="text-3xl font-bold mt-4 mb-2 text-center md:text-left">
+            {game.name}
+          </h1>
+          {game.totalRatings > 0 && game.averageRating && (
             <div className="flex items-center gap-2 mb-4 justify-center md:justify-start">
               <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
               <span className="font-semibold text-xl">
@@ -91,7 +106,10 @@ export function GameDetails({ game, reviews }: GameDetails) {
           )}
 
           <div className="mt-2 mb-6 w-52 max-w-full mx-auto md:mx-0">
-            <Select value={status ?? undefined} onValueChange={handleStatusChange}>
+            <Select
+              value={status ?? undefined}
+              onValueChange={handleStatusChange}
+            >
               <SelectTrigger className="text-sm">
                 <SelectValue placeholder="Definir status" />
               </SelectTrigger>
@@ -136,9 +154,11 @@ export function GameDetails({ game, reviews }: GameDetails) {
           </div>
         </div>
 
-        {/* Avaliações */}
         <div className="md:w-2/3">
-          <ReviewForm onSubmit={onSubmitReview} />
+          <ReviewForm
+            onSubmit={onSubmitReview}
+            isLoading={isSubmittingReview}
+          />
           <Card className="mt-6">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -150,7 +170,10 @@ export function GameDetails({ game, reviews }: GameDetails) {
               {reviews.length > 0 ? (
                 <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
                   {reviews.map((review) => (
-                    <div key={review.id} className="border-b pb-4 last:border-b-0">
+                    <div
+                      key={review.id}
+                      className="border-b pb-4 last:border-b-0"
+                    >
                       <div className="flex items-center gap-3 mb-2">
                         <Avatar
                           className="h-8 w-8 cursor-pointer"
@@ -187,9 +210,13 @@ export function GameDetails({ game, reviews }: GameDetails) {
                         </div>
                       </div>
                       {review.title && (
-                        <h4 className="font-medium mb-1 text-sm">{review.title}</h4>
+                        <h4 className="font-medium mb-1 text-sm">
+                          {review.title}
+                        </h4>
                       )}
-                      <p className="text-sm text-muted-foreground">{review.content}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {review.content}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -200,8 +227,6 @@ export function GameDetails({ game, reviews }: GameDetails) {
               )}
             </CardContent>
           </Card>
-
-
         </div>
       </div>
     </div>
