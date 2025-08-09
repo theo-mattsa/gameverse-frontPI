@@ -24,4 +24,7 @@ export const ratingService = {
     });
     return res.data;
   },
+  async deleteRating(ratingId: string): Promise<void> {
+    await api.delete(`/rating/${ratingId}`);
+  },
 };

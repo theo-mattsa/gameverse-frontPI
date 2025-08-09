@@ -12,8 +12,22 @@ import { Card } from "../ui/card";
 import { useRouter } from "next/navigation";
 import { CreateListGameSchema } from "@/lib/schemas/create-listgame-schema";
 import { gameListService } from "@/lib/api/gamelist-service";
+import { ratingService } from "@/lib/api/rating-service";
 import { toast } from "sonner";
 import { GameList, RatingByUserId } from "@/lib/api/types";
+import { Button } from "../ui/button";
+import { Trash2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui/alert-dialog";
 
 interface ProfileContentProps {
   lists: GameList[];
@@ -31,6 +45,8 @@ export function ProfileContent({
     "lists"
   );
   const [openModal, setOpenModal] = useState(false);
+  const [deletingListId, setDeletingListId] = useState<string | null>(null);
+  const [deletingReviewId, setDeletingReviewId] = useState<string | null>(null);
 
   async function handleCreateList(data: CreateListGameSchema) {
     try {
@@ -47,6 +63,36 @@ export function ProfileContent({
       console.error("Erro ao criar lista:", error);
       toast.error("Erro ao criar lista. Tente novamente.");
       setOpenModal(false);
+    }
+  }
+
+  async function handleDeleteList(listId: string) {
+    setDeletingListId(listId);
+    try {
+      await gameListService.deleteGameList(listId);
+      toast.success("Lista removida com sucesso! Recarregando...");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      window.location.reload();
+    } catch (error) {
+      console.error("Failed to delete list:", error);
+      toast.error("Falha ao remover a lista.");
+    } finally {
+      setDeletingListId(null);
+    }
+  }
+
+  async function handleDeleteReview(reviewId: string) {
+    setDeletingReviewId(reviewId);
+    try {
+      await ratingService.deleteRating(reviewId);
+      toast.success("Review removida com sucesso! Recarregando...");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      window.location.reload();
+    } catch (error) {
+      console.error("Failed to delete review:", error);
+      toast.error("Falha ao remover a review.");
+    } finally {
+      setDeletingReviewId(null);
     }
   }
 
@@ -68,13 +114,13 @@ export function ProfileContent({
           </SelectContent>
         </Select>
         {selectedView === "lists" && isOwnProfile && (
-          <button
+          <Button
             className="bg-primary text-primary-foreground px-4 py-2 rounded hover:bg-primary/90 transition-colors"
             onClick={() => setOpenModal(true)}
             type="button"
           >
             Criar Lista
-          </button>
+          </Button>
         )}
       </div>
 
@@ -87,23 +133,60 @@ export function ProfileContent({
               {lists.map((list) => (
                 <Card
                   key={list.id}
-                  className="p-4 cursor-pointer hover:bg-accent transition-colors"
-                  onClick={() => router.push(`/list/${list.id}`)}
+                  className="p-4 hover:bg-accent transition-colors"
                 >
-                  <span className="font-semibold text-lg">{list.title}</span>
-                  <p className="text-muted-foreground text-sm">
-                    {list.games.length} jogos
-                  </p>
+                  <div className="flex justify-between items-start">
+                    <div
+                      className="flex-1 cursor-pointer"
+                      onClick={() => router.push(`/list/${list.id}`)}
+                    >
+                      <span className="font-semibold text-lg">
+                        {list.title}
+                      </span>
+                      <p className="text-muted-foreground text-sm">
+                        {list.games.length} jogos
+                      </p>
+                    </div>
+                    {isOwnProfile && (
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive ml-2"
+                            disabled={deletingListId === list.id}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Atenção</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Tem certeza que deseja remover a lista &quot;
+                              {list.title}&quot;? Esta ação não pode ser
+                              desfeita.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleDeleteList(list.id)}
+                              className="bg-destructive hover:bg-destructive/90"
+                            >
+                              {deletingListId === list.id
+                                ? "Removendo..."
+                                : "Remover"}
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    )}
+                  </div>
                 </Card>
               ))}
             </ul>
-            {isOwnProfile && (
-              <CreateListModal
-                open={openModal}
-                onOpenChange={setOpenModal}
-                onCreate={handleCreateList}
-              />
-            )}
           </>
         )
       ) : reviews.length === 0 ? (
@@ -113,29 +196,76 @@ export function ProfileContent({
           {reviews.map((review) => (
             <Card
               key={review.id}
-              className="p-4 cursor-pointer hover:bg-accent transition-colors"
-              onClick={() => router.push(`/game/${review.game.id}`)}
+              className="p-4 hover:bg-accent transition-colors"
             >
-              <div className="flex justify-between items-start mb-2">
-                <span className="font-semibold text-lg">
-                  {review.game.name}
-                </span>
-                <span className="text-yellow-400 font-bold">
-                  {review.rate} ★
-                </span>
+              <div className="flex justify-between items-start">
+                <div
+                  className="flex-1 cursor-pointer"
+                  onClick={() => router.push(`/game/${review.game.id}`)}
+                >
+                  <div className="flex justify-between items-start mb-2">
+                    <span className="font-semibold text-lg">
+                      {review.game.name}
+                    </span>
+                    <span className="text-yellow-400 font-bold">
+                      {review.rate} ★
+                    </span>
+                  </div>
+
+                  <p className="text-sm font-medium text-muted-foreground mb-1">
+                    {review.title}
+                  </p>
+
+                  <p className="text-muted-foreground text-sm italic">
+                    &quot;{review.content}&quot;
+                  </p>
+                </div>
+                {isOwnProfile && (
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive ml-2"
+                        disabled={deletingReviewId === review.id}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Remover Review</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Tem certeza que deseja remover a review do jogo &quot;
+                          {review.game.name}&quot;? Esta ação não pode ser
+                          desfeita.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDeleteReview(review.id)}
+                          className="bg-destructive hover:bg-destructive/90"
+                        >
+                          {deletingReviewId === review.id
+                            ? "Removendo..."
+                            : "Remover"}
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                )}
               </div>
-
-              <p className="text-sm font-medium text-muted-foreground mb-1">
-                {review.title}
-              </p>
-
-              <p className="text-muted-foreground text-sm italic">
-                &quot;{review.content}&quot;
-              </p>
             </Card>
           ))}
         </ul>
       )}
+      <CreateListModal
+        open={openModal && isOwnProfile}
+        onOpenChange={setOpenModal}
+        onCreate={handleCreateList}
+      />
     </div>
   );
 }

@@ -23,4 +23,7 @@ export const gameListService = {
     const res = await api.get<GameList>(`/gamelists/${id}`);
     return res.data;
   },
+  async deleteGameList(listId: string): Promise<void> {
+    await api.delete(`/gamelist/${listId}`);
+  },
 };

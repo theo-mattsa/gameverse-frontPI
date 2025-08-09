@@ -193,8 +193,6 @@ export default function CreateGamePage() {
                 </p>
               )}
             </div>
-
-            {/* Upload da Capa */}
             <div className="space-y-3">
               <Label>Capa do Jogo *</Label>
               <div className="flex flex-col space-y-4">
@@ -284,8 +282,6 @@ export default function CreateGamePage() {
                 </p>
               )}
             </div>
-
-            {/* Gêneros */}
             <div className="space-y-3">
               <Label>Gêneros *</Label>
               <p className="text-sm text-muted-foreground">

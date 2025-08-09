@@ -24,8 +24,6 @@ export function UserCard({ user }: UserCardProps) {
           <h2 className="text-base font-semibold text-foreground group-hover:text-primary transition-colors truncate">
             {user.username}
           </h2>
-
-          {/* Placeholder for stats */}
           <div className="mt-3 grid grid-cols-3 gap-1 text-xs text-muted-foreground">
             <div>
               <p className="font-bold text-foreground text-sm">-</p>

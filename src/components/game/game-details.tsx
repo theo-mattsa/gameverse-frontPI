@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Star, Calendar, MessageSquare } from "lucide-react";
+import { Star, Calendar, MessageSquare, Trash2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 import { Game, GameStatus, Rating } from "@/lib/api/types";
@@ -22,6 +22,18 @@ import {
 } from "../ui/select";
 import { gameStatusService } from "@/lib/api/game-status-service";
 import { useEffect, useState } from "react";
+import { Button } from "../ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui/alert-dialog";
 
 interface GameDetails {
   game: Game;
@@ -33,6 +45,7 @@ export function GameDetails({ game, reviews }: GameDetails) {
   const router = useRouter();
   const [status, setStatus] = useState<GameStatus | null>(null);
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+  const [deletingReviewId, setDeletingReviewId] = useState<string | null>(null);
 
   async function handleStatusChange(status: GameStatus) {
     try {
@@ -75,10 +88,24 @@ export function GameDetails({ game, reviews }: GameDetails) {
     }
   }
 
+  async function handleDeleteReview(reviewId: string) {
+    setDeletingReviewId(reviewId);
+    try {
+      await ratingService.deleteRating(reviewId);
+      toast.success("Review removida com sucesso! Recarregando...");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      window.location.reload();
+    } catch (error) {
+      console.error("Failed to delete review:", error);
+      toast.error("Falha ao remover a review.");
+    } finally {
+      setDeletingReviewId(null);
+    }
+  }
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-[1200px]">
       <div className="flex flex-col md:flex-row gap-8">
-        {/* Dados do jogo */}
         <div className="md:w-1/3">
           <div className="w-48 h-64 rounded-lg overflow-hidden shadow-lg mx-auto md:mx-0 bg-muted flex items-center justify-center">
             <Image
@@ -174,40 +201,81 @@ export function GameDetails({ game, reviews }: GameDetails) {
                       key={review.id}
                       className="border-b pb-4 last:border-b-0"
                     >
-                      <div className="flex items-center gap-3 mb-2">
-                        <Avatar
-                          className="h-8 w-8 cursor-pointer"
-                          onClick={() =>
-                            router.push(`/profile/${review.user.username}`)
-                          }
-                        >
-                          <AvatarImage
-                            src={review.user.foto || undefined}
-                            alt={review.user.username}
-                            data-ai-hint="profile picture"
-                          />
-                          <AvatarFallback className="text-xs">
-                            {review.user.username.substring(0, 2).toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="font-medium text-sm">
-                            {review.user.username === user?.username
-                              ? "Você"
-                              : review.user.username}
-                          </p>
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <div className="flex items-center">
-                              <Star className="w-3 h-3 mr-1 fill-yellow-400 text-yellow-400" />
-                              {review.rate}
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-3">
+                          <Avatar
+                            className="h-8 w-8 cursor-pointer"
+                            onClick={() =>
+                              router.push(`/profile/${review.user.username}`)
+                            }
+                          >
+                            <AvatarImage
+                              src={review.user.foto || undefined}
+                              alt={review.user.username}
+                              data-ai-hint="profile picture"
+                            />
+                            <AvatarFallback className="text-xs">
+                              {review.user.username
+                                .substring(0, 2)
+                                .toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <p className="font-medium text-sm">
+                              {review.user.username === user?.username
+                                ? "Você"
+                                : review.user.username}
+                            </p>
+                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                              <div className="flex items-center">
+                                <Star className="w-3 h-3 mr-1 fill-yellow-400 text-yellow-400" />
+                                {review.rate}
+                              </div>
+                              <span>
+                                {formatDistanceToNow(
+                                  new Date(review.createdAt),
+                                  {
+                                    addSuffix: true,
+                                  }
+                                )}
+                              </span>
                             </div>
-                            <span>
-                              {formatDistanceToNow(new Date(review.createdAt), {
-                                addSuffix: true,
-                              })}
-                            </span>
                           </div>
                         </div>
+                        {review.user.username === user?.username && (
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
+                                disabled={deletingReviewId === review.id}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Atenção</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Tem certeza que deseja remover esta review?
+                                  Esta ação não pode ser desfeita.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => handleDeleteReview(review.id)}
+                                  className="bg-destructive hover:bg-destructive/90"
+                                >
+                                  {deletingReviewId === review.id
+                                    ? "Removendo..."
+                                    : "Remover"}
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        )}
                       </div>
                       {review.title && (
                         <h4 className="font-medium mb-1 text-sm">
