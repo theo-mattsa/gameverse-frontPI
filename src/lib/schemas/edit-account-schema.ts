@@ -4,7 +4,7 @@ export const editAccountSchema = z
   .object({
     password: z.string().optional(),
     username: z.string().optional(),
-    email: z.string().email().optional(),
+    email: z.string().optional(),
   })
   .refine((data) => data.password || data.username || data.email, {
     message:

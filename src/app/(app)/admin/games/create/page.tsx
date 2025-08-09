@@ -235,7 +235,8 @@ export default function CreateGamePage() {
                       src={previewImage}
                       alt="Preview da capa"
                       fill
-                      className="object-cover"
+                      className="object-contain"
+                      style={{ objectFit: "contain", borderRadius: "8px" }}
                     />
                   </div>
                 ) : (

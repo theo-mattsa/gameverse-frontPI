@@ -95,7 +95,8 @@ export default function AdminGamesPage() {
                   src={game.foto}
                   alt={game.name}
                   fill
-                  className="object-cover"
+                  className="object-contain"
+                  style={{ objectFit: "contain" }}
                 />
               </div>
               <CardHeader className="p-4">

@@ -80,19 +80,20 @@ export function GameDetails({ game, reviews }: GameDetails) {
       <div className="flex flex-col md:flex-row gap-8">
         {/* Dados do jogo */}
         <div className="md:w-1/3">
-          <div className="w-48 h-64 rounded-lg overflow-hidden shadow-lg mx-auto md:mx-0">
+          <div className="w-48 h-64 rounded-lg overflow-hidden shadow-lg mx-auto md:mx-0 bg-muted flex items-center justify-center">
             <Image
               src={game.foto}
               alt={game.name}
               width={192}
               height={256}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover rounded-lg"
+              style={{ objectFit: "cover" }}
             />
           </div>
           <h1 className="text-3xl font-bold mt-4 mb-2 text-center md:text-left">
             {game.name}
           </h1>
-          {game.averageRating && (
+          {game.totalRatings > 0 && game.averageRating && (
             <div className="flex items-center gap-2 mb-4 justify-center md:justify-start">
               <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
               <span className="font-semibold text-xl">
@@ -153,7 +154,6 @@ export function GameDetails({ game, reviews }: GameDetails) {
           </div>
         </div>
 
-        {/* Avaliações */}
         <div className="md:w-2/3">
           <ReviewForm
             onSubmit={onSubmitReview}
