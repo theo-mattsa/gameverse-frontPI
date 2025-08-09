@@ -6,17 +6,29 @@ import { Game } from "@/lib/api/types";
 import { gameService } from "@/lib/api/game-service";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Loader2, Plus } from "lucide-react";
+import { ArrowLeft, Loader2, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function AdminGamesPage() {
   const { user, isLoading } = useAuth();
   const router = useRouter();
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deletingGameId, setDeletingGameId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isLoading && (!user || user.role !== "ADMIN")) {
@@ -42,6 +54,18 @@ export default function AdminGamesPage() {
     }
   };
 
+  const handleDeleteGame = async (gameId: string, gameName: string) => {
+    try {
+      setDeletingGameId(gameId);
+      await gameService.deleteGame(gameId);
+      setGames(games.filter((game) => game.id !== gameId));
+      toast.success(`Jogo "${gameName}" removido com sucesso`);
+    } catch {
+      toast.error("Erro ao remover jogo");
+    } finally {
+      setDeletingGameId(null);
+    }
+  };
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
@@ -125,9 +149,44 @@ export default function AdminGamesPage() {
                   <Button variant="outline" size="sm" className="flex-1">
                     Editar
                   </Button>
-                  <Button variant="destructive" size="sm" className="flex-1">
-                    Remover
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="flex-1"
+                        disabled={deletingGameId === game.id}
+                      >
+                        {deletingGameId === game.id ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <Trash2 className="h-4 w-4" />
+                        )}
+                        {deletingGameId === game.id
+                          ? "Removendo..."
+                          : "Remover"}
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Confirmar remoção</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Tem certeza que deseja remover o jogo "{game.name}"?
+                          Esta ação não pode ser desfeita e todos os dados
+                          relacionados ao jogo serão perdidos permanentemente.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDeleteGame(game.id, game.name)}
+                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                          Remover
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </CardContent>
             </Card>

@@ -29,4 +29,7 @@ export const gameService = {
       genres,
     });
   },
+  async deleteGame(id: string): Promise<void> {
+    await api.delete(`/game/${id}`);
+  },
 };
